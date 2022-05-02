@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
-import About from './components/views/About';
-import Home from './components/views/Home';
+import About from './components/views/about/About';
+import Home from './components/views/home/Home';
+import Conv from './components/views/convolution/Conv';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route exact path='/' element={<Home />} />
             <Route path='/about' element={<About />} />
+            <Route path='/deconv' element={<Conv />} />
           </Routes>
         </div>
         <Footer />
