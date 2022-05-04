@@ -1,9 +1,19 @@
 import { useState } from 'react';
+import axios from 'axios';
 import Cam from './Cam';
 import ProcessedImage from './ProcessedImage';
 
 function Conv() {
-  const [layerList] = useState(['block1_conv1', 'block1_conv2', 'block1_pool']);
+  const [layerList] = useState([
+    'block1_conv1',
+    'block1_conv2',
+    'block1_pool',
+    'block2_conv1',
+    'block2_conv2',
+    'block2_pool',
+    'block3_conv1',
+    'block3_conv2',
+  ]);
   const [selectedLayer, selectLayer] = useState('block1_conv1');
   const [capturedImage, captureImage] = useState({
     captured: false,
@@ -27,12 +37,28 @@ function Conv() {
     let file = image;
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('layer', selectedLayer);
+    formData.append('layer_name', selectedLayer);
 
-    // WIP: Send data to backend and show the processed data
-    captureImage({ captured: true, image: image, loading: false, error: false });
-
-    console.log(capturedImage);
+    axios({
+      method: 'post',
+      url: 'http://localhost:3002',
+      data: formData,
+      config: {
+        headers: {
+          'Content-Type': '*',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
+      },
+    })
+      .then((response) => {
+        captureImage({ captured: true, image: response.data, loading: false, error: false });
+      })
+      .catch((error) => {
+        captureImage({ captured: false, image: null, loading: false, error: true });
+      });
   };
 
   return (

@@ -17,7 +17,11 @@ function ProcessedImage(props) {
     );
   }
 
-  return <div className='w-full text-center border bg-white shadow-sm rounded-lg'>{content}</div>;
+  return (
+    <div className='w-full text-center border bg-white shadow-sm rounded-lg grid place-items-center'>
+      <span className='inline-block'>{content}</span>
+    </div>
+  );
 }
 
 export default ProcessedImage;
