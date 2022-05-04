@@ -49,4 +49,4 @@ async def post_image(file: str = Form(...), layer_name: str = Form(...)):
 if __name__ == '__main__':
   import os
   print(os.getcwd())
-  uvicorn.run('conv.app.main:app', host='0.0.0.0', port=3002, reload=True)
+  uvicorn.run('app.main:app', host='0.0.0.0', port=3002, reload=True)
