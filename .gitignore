@@ -357,7 +357,7 @@ local.properties
 *.pdb
 
 # Kernel Module Compile Results
-*.mod*
+# *.mod*
 *.cmd
 .tmp_versions/
 modules.order
