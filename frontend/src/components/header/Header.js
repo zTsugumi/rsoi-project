@@ -1,15 +1,49 @@
-import { Link } from 'react-router-dom';
-import NavBar from './NavBar';
+import React, { useState } from 'react';
+import { Drawer, Button } from 'antd';
+import { AlignRightOutlined } from '@ant-design/icons';
+import './Header.css';
+import LeftMenu from './sections/LeftMenu';
+import RightMenu from './sections/RightMenu';
 
-function Header() {
+function Header(props) {
+  const [visible, setVisible] = useState(false);
+
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
   return (
-    <header className='border-b p-3 flex justify-between item-center'>
-      <Link to='/' className='font-bold'>
-        Test
-      </Link>
-
-      <NavBar />
-    </header>
+    <nav className='menu'>
+      <div className='menu__logo'>
+        <a href='/'>Logo</a>
+      </div>
+      <div className='menu__container'>
+        <div className='menu_left'>
+          <LeftMenu mode='horizontal' />
+        </div>
+        <div className='menu_right'>
+          <RightMenu mode='horizontal' user={props.user} signoutUser={props.signoutUser} />
+        </div>
+        <Button className='menu__mobile-button' type='primary' onClick={showDrawer}>
+          <AlignRightOutlined />
+        </Button>
+        <Drawer
+          title='Basic Drawer'
+          placement='right'
+          className='menu_drawer'
+          closable={false}
+          onClose={onClose}
+          visible={visible}
+        >
+          <LeftMenu mode='inline' />
+          <RightMenu mode='inline' user={props.user} signoutUser={props.signoutUser} />
+        </Drawer>
+      </div>
+    </nav>
   );
 }
 

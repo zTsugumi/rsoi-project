@@ -1,0 +1,12 @@
+.convbox {
+  height: 60%;
+  width: 95%;
+  margin: 1rem 1rem 1rem 1rem;
+}
+
+.convbox__item {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,9 +1,14 @@
+import { FaCode } from 'react-icons/fa';
+
 function Home() {
   return (
-    <div>
-      <h1 className='font-bold text-2xl'>Home</h1>
-      Welcome
-    </div>
+    <>
+      <div className='app'>
+        <FaCode style={{ fontSize: '4rem' }} />
+        <br />
+        <span style={{ fontSize: '2rem' }}>Computer Vision</span>
+      </div>
+    </>
   );
 }
 

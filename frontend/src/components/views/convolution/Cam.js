@@ -10,12 +10,14 @@ function Cam(props) {
   }, [webcamRef, props]);
 
   return (
-    <div className='w-full text-center border bg-white shadow-sm rounded-lg'>
-      <Webcam mirrored={true} width='100%' height='100%' ref={webcamRef} />
-      <button className='bg-blue-500 text-white p-2 justify-center' onClick={capture}>
-        Capture
-      </button>
-    </div>
+    <>
+      <div>
+        <Webcam mirrored={true} width='100%' height='100%' ref={webcamRef} />
+      </div>
+      <div>
+        <button onClick={capture}>Capture</button>
+      </div>
+    </>
   );
 }
 

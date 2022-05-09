@@ -1,10 +1,10 @@
-import Load from '../load/Load';
+import { Loading } from '../../loading/Loading';
 
 function ProcessedImage(props) {
   let content = <h1 className='font-bold'>{props.initLabel}</h1>;
 
   if (props.loading) {
-    content = <Load></Load>;
+    content = <Loading />;
   } else if (props.image != null) {
     content = <img src={props.image} alt='' />;
   }
@@ -18,7 +18,7 @@ function ProcessedImage(props) {
   }
 
   return (
-    <div className='w-full text-center border bg-white shadow-sm rounded-lg grid place-items-center'>
+    <div>
       <span className='inline-block'>{content}</span>
     </div>
   );

@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { Typography, Row, Col } from 'antd';
 import axios from 'axios';
 import Cam from './Cam';
 import ProcessedImage from './ProcessedImage';
+import './Conv.css';
+
+const { Title } = Typography;
 
 function Conv() {
   const [layerList] = useState([
@@ -62,22 +66,28 @@ function Conv() {
   };
 
   return (
-    <div className='grid text-center flex flex-col gap-4'>
-      <h1 className='font-bold text-2xl mb-3'>Convolution</h1>
-      <span className='inline-block'>
-        <p>Convolutional view of live webcam</p>
-        <select value={layerList.find((obj) => obj === selectedLayer)} onChange={handleChange}>
-          {layerList.map((layer) => (
-            <option key={layer} value={layer}>
-              {layer}
-            </option>
-          ))}
-        </select>
-      </span>
-      <div className='grid grid-cols-2 gap-4'>
-        <Cam onCapture={handleCapture} />
-        <ProcessedImage {...capturedImage} initLabel='The processed image will be here' />
-      </div>
+    <div className='app'>
+      <Title level={2}>Convolution</Title>
+      <Row gutter={16}>
+        <Col span={18}>Convolutional view of live webcam</Col>
+        <Col span={6}>
+          <select value={layerList.find((obj) => obj === selectedLayer)} onChange={handleChange}>
+            {layerList.map((layer) => (
+              <option key={layer} value={layer}>
+                {layer}
+              </option>
+            ))}
+          </select>
+        </Col>
+      </Row>
+      <Row gutter={16} className='convbox'>
+        <Col span={12} className='convbox__item'>
+          <Cam onCapture={handleCapture} />
+        </Col>
+        <Col span={12} className='convbox__item'>
+          <ProcessedImage {...capturedImage} initLabel='The processed image will be here' />
+        </Col>
+      </Row>
     </div>
   );
 }
