@@ -5,7 +5,6 @@ import { PostgresConfigModule } from '../../config/database/postgres/config.modu
 import { PostgresConfigService } from '../../config/database/postgres/config.service';
 import { AppConfigModule } from '../../config/app/config.module';
 import { AppConfigService } from '../../config/app/config.service';
-import { AuthSubscriber } from '../../models/authentication/subscribers/auth.subscriber';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { AuthSubscriber } from '../../models/authentication/subscribers/auth.sub
         entities: ['dist/models/**/*.entity{.ts,.js}'],
         synchronize: true,
         autoLoadEntities: true,
-        subscribers: [AuthSubscriber],
         ssl:
           appConfigService.env === 'production'
             ? { rejectUnauthorized: false }

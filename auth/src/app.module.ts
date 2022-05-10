@@ -1,16 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppConfigModule } from './config/app/config.module';
 import { PostgresDatabaseModule } from './database/postgres/postgres.module';
-import { AuthenticationModule } from './models/authentication/auth.module';
+import { AuthModule } from './models/auth/auth.module';
 import { UserModule } from './models/user/user.module';
 
 @Module({
-  imports: [
-    AppConfigModule,
-    PostgresDatabaseModule,
-    UserModule,
-    AuthenticationModule,
-  ],
+  imports: [AppConfigModule, PostgresDatabaseModule, UserModule, AuthModule],
   controllers: [],
   providers: [],
 })

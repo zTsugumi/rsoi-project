@@ -8,6 +8,7 @@ import { AppModule } from './app.module';
 import { APIPrefix } from './common/constant';
 import { AppConfigService } from './config/app/config.service';
 import { HttpExceptionFilter } from './exception/http-exception.filter';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,8 @@ async function bootstrap() {
     credentials: true,
     allowedHeaders: 'Content-Type, Accept',
   });
+  app.use(cookieParser());
+
   const appConfig: AppConfigService = await app.get(AppConfigService);
   const appReflector = app.get(Reflector);
 
