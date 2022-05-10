@@ -13,6 +13,7 @@ import {
   AUTH_FAILURE,
 } from './allTypes';
 import { URL_AUTH } from '../../shared/config';
+import axios from 'axios';
 
 /****************************************** SIGNUP ******************************************/
 const signupRequest = () => {
@@ -37,36 +38,20 @@ const signupError = (message) => {
 const signupUser = (creds) => (dispatch) => {
   dispatch(signupRequest());
 
-  return fetch(`${URL_AUTH}/signup`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(creds),
+  const url = `${URL_AUTH}/signup`;
+
+  return axios({
+    method: 'post',
+    url: url,
+    data: creds,
   })
     .then((response) => {
-      if (response.ok) {
-        // If receive response from server
-        return response;
-      } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
-        throw error;
-      }
+      // WIP handle this
+      dispatch(signupSuccess());
     })
-    .then((response) => response.json())
-    .then((response) => {
-      console.log(response);
-      if (response) {
-        // If server successfully create new user
-        dispatch(signupSuccess());
-      } else {
-        var error = new Error('Error ' + response.status);
-        error.response = response;
-        throw error;
-      }
-    })
-    .catch((error) => dispatch(signupError(error.message)));
+    .catch((error) => {
+      dispatch(signupError(error.response.data.message));
+    });
 };
 
 /****************************************** SIGNIN ******************************************/
@@ -92,36 +77,16 @@ const signinError = (message) => {
 const signinUser = (creds) => (dispatch) => {
   dispatch(signinRequest());
 
-  return fetch(`${URL_AUTH}/signin`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(creds),
-  })
+  const url = `${URL_AUTH}/signin`;
+
+  return axios({ method: 'post', url: url, data: creds, withCredentials: true })
     .then((response) => {
-      if (response.ok) {
-        return response;
-      } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
-        throw error;
-      }
+      dispatch(signinSuccess());
+      dispatch(authSuccess(response.data));
     })
-    .then((response) => response.json())
-    .then((response) => {
-      if (response.success) {
-        dispatch(signinSuccess());
-      } else {
-        var error = new Error('Error ' + response.status);
-        error.response = response;
-        throw error;
-      }
-    })
-    .then(() => dispatch(authUser()))
-    .catch((error) => dispatch(signinError(error.message)));
+    .catch((error) => {
+      dispatch(signinError(error.response.data.message));
+    });
 };
 
 /****************************************** SIGNOUT *****************************************/
@@ -147,20 +112,19 @@ const signoutError = (message) => {
 const signoutUser = () => (dispatch) => {
   dispatch(signoutRequest());
 
-  return fetch(`${URL_AUTH}/signout`, {
-    method: 'GET',
-    credentials: 'include',
+  const url = `${URL_AUTH}/signout`;
+
+  return axios({
+    method: 'get',
+    url: url,
+    withCredentials: true,
   })
     .then((response) => {
-      if (response.ok) {
-        dispatch(signoutSuccess(response));
-      } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
-        throw error;
-      }
+      dispatch(signoutSuccess());
     })
-    .catch((error) => dispatch(signoutError(error.message)));
+    .catch((error) => {
+      dispatch(signoutError(error.response.data.message));
+    });
 };
 
 /******************************************* AUTH *******************************************/
@@ -185,36 +149,21 @@ const authError = (message) => {
 };
 
 const authUser = () => (dispatch) => {
-  // const timeout = 1000;
-  // const controller = new AbortController();
-  // setTimeout(() => controller.abort(), timeout);
   dispatch(authRequest());
 
-  return fetch(`${URL_AUTH}/auth`, {
-    method: 'GET',
-    credentials: 'include',
-    //signal: controller.signal
+  const url = `${URL_AUTH}/auth`;
+
+  return axios({
+    method: 'get',
+    url: url,
+    withCredentials: true,
   })
     .then((response) => {
-      if (response.ok) {
-        return response;
-      } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
-        throw error;
-      }
+      dispatch(authSuccess(response.data));
     })
-    .then((response) => response.json())
-    .then((response) => {
-      if (response.success) {
-        dispatch(authSuccess(response));
-      } else {
-        var error = new Error('Error ' + response.status);
-        error.response = response;
-        throw error;
-      }
-    })
-    .catch((error) => dispatch(authError(error.message)));
+    .catch((error) => {
+      dispatch(authError(error.response.data.message));
+    });
 };
 
 const userActions = {

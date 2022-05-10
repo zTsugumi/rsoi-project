@@ -29,15 +29,13 @@ function Register(props) {
     if (user.regSuccess === true) {
       history.push('/login');
     } else if (user.regSuccess === false) {
-      setFormError(
-        "Sorry, we couldn't register your account. Please check your information again!"
-      );
+      setFormError(`Sorry, we couldn't register your account. ${user.errMess}.`);
     }
 
     return () => {
       setFormError('');
     };
-  }, [user.regSuccess, history]);
+  }, [user.regSuccess, user.errMess, history]);
 
   const signupValidationSchema = Yup.object().shape({
     firstname: Yup.string().required('First Name is required'),
@@ -55,7 +53,7 @@ function Register(props) {
     actions.setSubmitting(true);
 
     const creds = {
-      emailAddress: values.email,
+      email: values.email,
       password: values.password,
       firstName: values.firstname,
       lastName: values.lastname,
