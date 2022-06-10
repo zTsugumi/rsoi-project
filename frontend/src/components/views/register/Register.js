@@ -4,8 +4,11 @@ import { Typography } from 'antd';
 import { Form, FormItem, Input, SubmitButton } from 'formik-antd';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import AllActions from '../../../redux/actions/allActions';
 import { Loading } from '../../loading/Loading';
 import './Register.css';
+
 
 const { Title } = Typography;
 
@@ -23,7 +26,11 @@ const formItemLayout = {
 function Register(props) {
   const [formError, setFormError] = useState('');
   const history = useHistory();
-  const { user, signupUser } = props;
+  // const { user, signupUser } = props;
+
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const signupUser = (creds) => dispatch(AllActions.UserActions.signupUser(creds));
 
   useEffect(() => {
     if (user.regSuccess === true) {

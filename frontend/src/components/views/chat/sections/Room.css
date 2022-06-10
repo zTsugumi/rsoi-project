@@ -1,0 +1,13 @@
+.roombox__list {
+  width: 100%;
+}
+
+.ant-list-items {
+  overflow-y: scroll;
+  height: 63vh;
+}
+
+.ant-list-pagination {
+  display: flex;
+  justify-content: center;
+}

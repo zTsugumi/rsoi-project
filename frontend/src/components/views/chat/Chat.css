@@ -1,0 +1,17 @@
+.mainbox {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.roombox {
+  margin: 2rem 0rem;
+  padding: 0rem 2.5rem;
+  display: flex;
+}
+
+.chatbox {
+  margin: 2rem 0rem;
+  padding: 0rem 2.5rem;
+  display: flex;
+}

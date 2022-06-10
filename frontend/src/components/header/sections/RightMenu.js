@@ -29,6 +29,8 @@ function RightMenu(props) {
     if (user.creds) {
       return (
         <Menu mode={props.mode}>
+          {/* WIP */}
+          <Menu.Item key='profile'>Logged in as {user.creds.firstName}</Menu.Item>
           <Menu.Item key='logout'>
             <a onClick={() => signoutUser()}>Sign out</a>
           </Menu.Item>

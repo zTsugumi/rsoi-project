@@ -12,7 +12,7 @@ import {
   AUTH_SUCCESS,
   AUTH_FAILURE,
 } from './allTypes';
-import { URL_AUTH } from '../../shared/config';
+import { URL_GW } from '../../shared/config';
 import axios from 'axios';
 
 /****************************************** SIGNUP ******************************************/
@@ -38,7 +38,7 @@ const signupError = (message) => {
 const signupUser = (creds) => (dispatch) => {
   dispatch(signupRequest());
 
-  const url = `${URL_AUTH}/signup`;
+  const url = `${URL_GW}/signup`;
 
   return axios({
     method: 'post',
@@ -61,9 +61,10 @@ const signinRequest = () => {
   };
 };
 
-const signinSuccess = () => {
+const signinSuccess = (creds) => {
   return {
     type: SIGNIN_SUCCESS,
+    payload: creds,
   };
 };
 
@@ -77,12 +78,11 @@ const signinError = (message) => {
 const signinUser = (creds) => (dispatch) => {
   dispatch(signinRequest());
 
-  const url = `${URL_AUTH}/signin`;
+  const url = `${URL_GW}/signin`;
 
   return axios({ method: 'post', url: url, data: creds, withCredentials: true })
     .then((response) => {
-      dispatch(signinSuccess());
-      dispatch(authSuccess(response.data));
+      dispatch(signinSuccess(response.data));
     })
     .catch((error) => {
       dispatch(signinError(error.response.data.message));
@@ -112,7 +112,7 @@ const signoutError = (message) => {
 const signoutUser = () => (dispatch) => {
   dispatch(signoutRequest());
 
-  const url = `${URL_AUTH}/signout`;
+  const url = `${URL_GW}/signout`;
 
   return axios({
     method: 'get',
@@ -151,7 +151,7 @@ const authError = (message) => {
 const authUser = () => (dispatch) => {
   dispatch(authRequest());
 
-  const url = `${URL_AUTH}/auth`;
+  const url = `${URL_GW}/auth`;
 
   return axios({
     method: 'get',

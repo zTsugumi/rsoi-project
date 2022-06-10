@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { Drawer, Button } from 'antd';
+import { Drawer, Button, Divider } from 'antd';
 import { AlignRightOutlined } from '@ant-design/icons';
+import { useSelector, useDispatch } from 'react-redux';
+import AllActions from '../../redux/actions/allActions';
 import './Header.css';
 import LeftMenu from './sections/LeftMenu';
 import RightMenu from './sections/RightMenu';
 
 function Header(props) {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const signoutUser = () => dispatch(AllActions.UserActions.signoutUser());
+
   const [visible, setVisible] = useState(false);
 
   const showDrawer = () => {
@@ -26,13 +32,13 @@ function Header(props) {
           <LeftMenu mode='horizontal' />
         </div>
         <div className='menu_right'>
-          <RightMenu mode='horizontal' user={props.user} signoutUser={props.signoutUser} />
+          <RightMenu mode='horizontal' user={user} signoutUser={signoutUser} />
         </div>
         <Button className='menu__mobile-button' type='primary' onClick={showDrawer}>
           <AlignRightOutlined />
         </Button>
         <Drawer
-          title='Basic Drawer'
+          title='Menu'
           placement='right'
           className='menu_drawer'
           closable={false}
@@ -40,7 +46,8 @@ function Header(props) {
           visible={visible}
         >
           <LeftMenu mode='inline' />
-          <RightMenu mode='inline' user={props.user} signoutUser={props.signoutUser} />
+          <Divider />
+          <RightMenu mode='inline' user={user} signoutUser={signoutUser} />
         </Drawer>
       </div>
     </nav>

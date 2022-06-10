@@ -54,7 +54,7 @@ const users = (state = {
       return {
         ...state,
         isLoading: false,
-        creds: null,
+        creds: action.payload,
         regSuccess: null,
         logSuccess: true,
         errMess: null

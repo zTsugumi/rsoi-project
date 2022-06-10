@@ -8,6 +8,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Loading } from '../../loading/Loading';
 import './Login.css';
+import { useSelector, useDispatch } from 'react-redux';
+import AllActions from '../../../redux/actions/allActions';
 
 const { Title } = Typography;
 
@@ -15,8 +17,12 @@ function Login(props) {
   const [formError, setFormError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const signinUser = (creds) => dispatch(AllActions.UserActions.signinUser(creds));
+
   const history = useHistory();
-  const { user, signinUser } = props;
+  // const { user, signinUser } = props;
 
   // Run only 1 time after render
   useEffect(() => {
