@@ -23,7 +23,10 @@ export class AppConfigService {
   get httpMaxDirect(): number {
     return Number(this.configService.get<number>('app.httpMaxDirect'));
   }
-  get urlConv(): string {
-    return this.configService.get<string>('app.urlConv');
+  get urlAuth(): string {
+    return this.configService.get<string>('app.urlAuth');
+  }
+  get urlRoom(): string {
+    return this.configService.get<string>('app.urlRoom');
   }
 }

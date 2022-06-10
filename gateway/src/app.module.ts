@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { AppConfigModule } from './config/app/config.module';
 import { AppConfigService } from './config/app/config.service';
+import { AuthModule } from './services/auth/auth.module';
+import { RoomModule } from './services/room/room.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { AppConfigService } from './config/app/config.service';
       }),
       inject: [AppConfigService],
     }),
+    AuthModule,
+    RoomModule,
   ],
   controllers: [],
   providers: [],

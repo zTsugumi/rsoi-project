@@ -14,6 +14,7 @@ async function bootstrap() {
     credentials: true,
     allowedHeaders: 'Content-Type, Accept',
   });
+
   const appConfig: AppConfigService = app.get(AppConfigService);
 
   app.setGlobalPrefix(APIPrefix.version);

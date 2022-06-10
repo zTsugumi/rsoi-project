@@ -2,7 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { AppConfigModule } from '../../config/app/config.module';
 import { AppConfigService } from '../../config/app/config.service';
-import { AuthController } from './auth.controller';
+import { RoomController } from './room.controller';
 
 @Module({
   imports: [
@@ -16,6 +16,6 @@ import { AuthController } from './auth.controller';
       inject: [AppConfigService],
     }),
   ],
-  controllers: [AuthController],
+  controllers: [RoomController],
 })
-export class AuthModule {}
+export class RoomModule {}
