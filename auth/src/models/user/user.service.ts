@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { In } from 'typeorm';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './repositories/user.repository';
@@ -39,5 +40,18 @@ export class UserService {
       'User with this id does not exist',
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  public async getNames(usersUUID: String[]) {
+    const users = await this._userRepository.find({
+      where: { uuid: In(usersUUID) },
+    });
+
+    const fullNames = {};
+    for (const user of users) {
+      fullNames[user.uuid] = user.firstName + ' ' + user.lastName;
+    }
+
+    return fullNames;
   }
 }

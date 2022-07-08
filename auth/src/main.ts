@@ -22,7 +22,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(appReflector));
 
-  app.listen(appConfig.port, () => {
+  await app.listen(appConfig.port, () => {
     Logger.log(`auth is listening on ${appConfig.port}...`, 'Main');
   });
 }

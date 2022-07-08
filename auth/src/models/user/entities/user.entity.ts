@@ -5,10 +5,10 @@ import Role from '../enums/role.enum';
 
 @Entity({ name: 'users' })
 export class UserEntity extends AbstractEntity {
-  @Column()
+  @Column({ type: 'varchar', length: 50 })
   public firstName: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 50 })
   public lastName: string;
 
   @Column({
