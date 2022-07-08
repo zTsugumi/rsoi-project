@@ -1,31 +1,35 @@
-import { ROOM_REQUEST, ROOM_SUCCESS, ROOM_FAILURE } from './allTypes';
-import { URL_GW } from '../../shared/config';
 import axios from 'axios';
+import {
+  ROOM_REQUEST,
+  ROOM_SUCCESS,
+  ROOM_FAILURE,
+  JOIN_ROOM_REQUEST,
+  JOIN_ROOM_SUCCESS,
+  JOIN_ROOM_FAILURE,
+  LEAVE_ROOM_REQUEST,
+  LEAVE_ROOM_SUCCESS,
+  LEAVE_ROOM_FAILURE,
+} from './allTypes';
+import { URL_GW, PFX } from '../../shared/config';
 
-const roomRequest = () => {
-  return {
-    type: ROOM_REQUEST,
-  };
-};
+const roomRequest = () => ({
+  type: ROOM_REQUEST,
+});
 
-const roomSuccess = (rooms) => {
-  return {
-    type: ROOM_SUCCESS,
-    payload: rooms,
-  };
-};
+const roomSuccess = (rooms) => ({
+  type: ROOM_SUCCESS,
+  payload: rooms,
+});
 
-const roomError = (message) => {
-  return {
-    type: ROOM_FAILURE,
-    payload: message,
-  };
-};
+const roomError = (msg) => ({
+  type: ROOM_FAILURE,
+  payload: msg,
+});
 
 const roomGet = (pagination) => async (dispatch) => {
   dispatch(roomRequest());
 
-  const url = `${URL_GW}/rooms`;
+  const url = `${URL_GW}${PFX}/rooms`;
 
   return await axios({
     method: 'get',
@@ -40,8 +44,38 @@ const roomGet = (pagination) => async (dispatch) => {
     });
 };
 
+const joinRoomRequest = () => ({
+  type: JOIN_ROOM_REQUEST,
+});
+
+const joinRoomSuccess = () => ({
+  type: JOIN_ROOM_SUCCESS,
+});
+
+const joinRoomError = () => ({
+  type: JOIN_ROOM_FAILURE,
+});
+
+const leaveRoomRequest = () => ({
+  type: LEAVE_ROOM_REQUEST,
+});
+
+const leaveRoomSuccess = () => ({
+  type: LEAVE_ROOM_SUCCESS,
+});
+
+const leaveRoomError = () => ({
+  type: LEAVE_ROOM_FAILURE,
+});
+
 const roomActions = {
   roomGet,
+  joinRoomRequest,
+  joinRoomSuccess,
+  joinRoomError,
+  leaveRoomRequest,
+  leaveRoomSuccess,
+  leaveRoomError,
 };
 
 export default roomActions;

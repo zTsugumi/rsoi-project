@@ -1,5 +1,6 @@
 import UserActions from './userActions';
 import RoomActions from './roomActions';
+import ChatActions from './chatActions';
 
 // Action is a function that create an action object
 // The view will trigger the action, which then be sent to reducer to update store
@@ -8,6 +9,7 @@ import RoomActions from './roomActions';
 const AllActions = {
   UserActions,
   RoomActions,
+  ChatActions,
 };
 
 export default AllActions;

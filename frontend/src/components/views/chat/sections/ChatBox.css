@@ -1,31 +1,41 @@
-.roombox-list {
+.chatbox-list {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
-.ant-list-header {
+.chatbox-header {
+  padding: 12px 0px;
   height: 10%;
 }
 
-.ant-spin-nested-loading {
+.chatbox-body {
+  display: flex;
   height: 85%;
 }
 
-.ant-spin-container {
-  height: 100%;
-}
-
-.ant-list-items {
-  overflow-y: auto;
-  height: 100%;
-}
-
-.ant-list-pagination {
+.chatbar {
   display: flex;
   justify-content: center;
   width: 100%;
   position: absolute;
   bottom: 0;
+}
+
+.chat__icon_color {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.chat__button {
+  min-width: 100%;
+}
+
+#chat-panel {
+  height: 100%;
+}
+
+.chat-messages {
+  height: 65vh !important;
 }
 
 .link-button {

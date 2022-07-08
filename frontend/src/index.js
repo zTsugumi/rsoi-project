@@ -6,15 +6,20 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import App from './App';
 import './index.css';
+import WSProvider from './socket/WebSocket';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
+
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <WSProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </WSProvider>
   </Provider>
+
   // </React.StrictMode>
 );
 

@@ -12,35 +12,29 @@ import {
   AUTH_SUCCESS,
   AUTH_FAILURE,
 } from './allTypes';
-import { URL_GW } from '../../shared/config';
+import { URL_GW, PFX } from '../../shared/config';
 import axios from 'axios';
 
 /****************************************** SIGNUP ******************************************/
-const signupRequest = () => {
-  return {
-    type: SIGNUP_REQUEST,
-  };
-};
+const signupRequest = () => ({
+  type: SIGNUP_REQUEST,
+});
 
-const signupSuccess = () => {
-  return {
-    type: SIGNUP_SUCCESS,
-  };
-};
+const signupSuccess = () => ({
+  type: SIGNUP_SUCCESS,
+});
 
-const signupError = (message) => {
-  return {
-    type: SIGNUP_FAILURE,
-    payload: message,
-  };
-};
+const signupError = (msg) => ({
+  type: SIGNUP_FAILURE,
+  payload: msg,
+});
 
-const signupUser = (creds) => (dispatch) => {
+const signupUser = (creds) => async (dispatch) => {
   dispatch(signupRequest());
 
-  const url = `${URL_GW}/signup`;
+  const url = `${URL_GW}${PFX}/signup`;
 
-  return axios({
+  return await axios({
     method: 'post',
     url: url,
     data: creds,
@@ -55,32 +49,26 @@ const signupUser = (creds) => (dispatch) => {
 };
 
 /****************************************** SIGNIN ******************************************/
-const signinRequest = () => {
-  return {
-    type: SIGNIN_REQUEST,
-  };
-};
+const signinRequest = () => ({
+  type: SIGNIN_REQUEST,
+});
 
-const signinSuccess = (creds) => {
-  return {
-    type: SIGNIN_SUCCESS,
-    payload: creds,
-  };
-};
+const signinSuccess = (creds) => ({
+  type: SIGNIN_SUCCESS,
+  payload: creds,
+});
 
-const signinError = (message) => {
-  return {
-    type: SIGNIN_FAILURE,
-    payload: message,
-  };
-};
+const signinError = (msg) => ({
+  type: SIGNIN_FAILURE,
+  payload: msg,
+});
 
-const signinUser = (creds) => (dispatch) => {
+const signinUser = (creds) => async (dispatch) => {
   dispatch(signinRequest());
 
-  const url = `${URL_GW}/signin`;
+  const url = `${URL_GW}${PFX}/signin`;
 
-  return axios({ method: 'post', url: url, data: creds, withCredentials: true })
+  return await axios({ method: 'post', url: url, data: creds, withCredentials: true })
     .then((response) => {
       dispatch(signinSuccess(response.data));
     })
@@ -90,31 +78,25 @@ const signinUser = (creds) => (dispatch) => {
 };
 
 /****************************************** SIGNOUT *****************************************/
-const signoutRequest = () => {
-  return {
-    type: SIGNOUT_REQUEST,
-  };
-};
+const signoutRequest = () => ({
+  type: SIGNOUT_REQUEST,
+});
 
-const signoutSuccess = () => {
-  return {
-    type: SIGNOUT_SUCCESS,
-  };
-};
+const signoutSuccess = () => ({
+  type: SIGNOUT_SUCCESS,
+});
 
-const signoutError = (message) => {
-  return {
-    type: SIGNOUT_FAILURE,
-    payload: message,
-  };
-};
+const signoutError = (msg) => ({
+  type: SIGNOUT_FAILURE,
+  payload: msg,
+});
 
-const signoutUser = () => (dispatch) => {
+const signoutUser = () => async (dispatch) => {
   dispatch(signoutRequest());
 
-  const url = `${URL_GW}/signout`;
+  const url = `${URL_GW}${PFX}/signout`;
 
-  return axios({
+  return await axios({
     method: 'get',
     url: url,
     withCredentials: true,
@@ -128,32 +110,26 @@ const signoutUser = () => (dispatch) => {
 };
 
 /******************************************* AUTH *******************************************/
-const authRequest = () => {
-  return {
-    type: AUTH_REQUEST,
-  };
-};
+const authRequest = () => ({
+  type: AUTH_REQUEST,
+});
 
-const authSuccess = (creds) => {
-  return {
-    type: AUTH_SUCCESS,
-    payload: creds,
-  };
-};
+const authSuccess = (creds) => ({
+  type: AUTH_SUCCESS,
+  payload: creds,
+});
 
-const authError = (message) => {
-  return {
-    type: AUTH_FAILURE,
-    payload: message,
-  };
-};
+const authError = (msg) => ({
+  type: AUTH_FAILURE,
+  payload: msg,
+});
 
-const authUser = () => (dispatch) => {
+const authUser = () => async (dispatch) => {
   dispatch(authRequest());
 
-  const url = `${URL_GW}/auth`;
+  const url = `${URL_GW}${PFX}/auth`;
 
-  return axios({
+  return await axios({
     method: 'get',
     url: url,
     withCredentials: true,

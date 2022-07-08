@@ -66,7 +66,7 @@ function Login(props) {
       localStorage.removeItem('rememberData');
     }
 
-    await signinUser(creds);
+    signinUser(creds);
 
     actions.setSubmitting(false);
   };
