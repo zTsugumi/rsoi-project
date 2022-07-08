@@ -16,6 +16,8 @@ import configuration from './configuration';
         HTTP_MAX_REDIRECTS: Joi.number(),
         URL_AUTH: Joi.string(),
         URL_ROOM: Joi.string(),
+        URL_CHAT: Joi.string(),
+        CORS_ORIGIN: Joi.string(),
       }),
     }),
   ],

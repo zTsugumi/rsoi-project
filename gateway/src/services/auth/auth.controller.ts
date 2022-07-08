@@ -1,5 +1,14 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Body, Controller, Post, Res, Get, Req } from '@nestjs/common';
+import {
+  HttpException,
+  Body,
+  Controller,
+  Post,
+  Res,
+  Get,
+  Req,
+  ParseArrayPipe,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { map, catchError, Observable } from 'rxjs';
 import { AppConfigService } from '../../config/app/config.service';
@@ -21,7 +30,6 @@ export class AuthController {
 
     return this._httpService.post(url, registrationData).pipe(
       map((response) => {
-        console.log(response.data);
         return response.data;
       }),
       catchError((err) => {
@@ -85,5 +93,19 @@ export class AuthController {
           throw new HttpException(err.response.data.message, err.response.data.statusCode);
         }),
       );
+  }
+
+  @Get('names')
+  public async getNames(@Body(new ParseArrayPipe({ items: String })) usersUUID: String[]) {
+    const url = this._appConfig.urlAuth + '/names';
+
+    return this._httpService.get(url, { data: usersUUID }).pipe(
+      map((res) => {
+        return res.data;
+      }),
+      catchError((err) => {
+        throw new HttpException(err.response.data.message, err.response.data.statusCode);
+      }),
+    );
   }
 }

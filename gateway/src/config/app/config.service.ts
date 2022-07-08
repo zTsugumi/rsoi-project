@@ -29,4 +29,10 @@ export class AppConfigService {
   get urlRoom(): string {
     return this.configService.get<string>('app.urlRoom');
   }
+  get urlChat(): string {
+    return this.configService.get<string>('app.urlChat');
+  }
+  get corsOrigin(): string {
+    return this.configService.get<string>('app.corsOrigin');
+  }
 }
