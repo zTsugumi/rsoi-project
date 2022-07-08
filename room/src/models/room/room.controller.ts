@@ -5,11 +5,11 @@ import {
   PaginationResponseDto,
 } from './dtos/pagination.dto';
 
-@Controller()
+@Controller('rooms')
 export class RoomController {
   constructor(private _roomService: RoomService) {}
 
-  @Get('rooms')
+  @Get()
   public async getRooms(
     @Query() pagination: PaginationRequestDto,
   ): Promise<PaginationResponseDto> {

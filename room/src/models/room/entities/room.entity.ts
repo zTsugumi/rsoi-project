@@ -3,9 +3,9 @@ import { AbstractEntity } from '../../../common/entities';
 
 @Entity({ name: 'rooms' })
 export class RoomEntity extends AbstractEntity {
-  @Column()
+  @Column({ type: 'varchar', length: 50 })
   public name: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 150 })
   public description: string;
 }
