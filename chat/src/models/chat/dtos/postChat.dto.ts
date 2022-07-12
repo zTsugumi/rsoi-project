@@ -1,11 +1,12 @@
 import {
   IsDateString,
-  IsIn,
+  IsEnum,
   IsNotEmpty,
   IsString,
   IsUUID,
   MaxLength,
 } from 'class-validator';
+import ChatType from '../enums/chatType.enum';
 
 export class PostChatReqDTO {
   @IsString()
@@ -21,10 +22,9 @@ export class PostChatReqDTO {
   @IsNotEmpty()
   readonly userUUID: string;
 
-  @IsString()
-  @IsIn(['text', 'file'])
+  @IsEnum(ChatType)
   @IsNotEmpty()
-  readonly type: string;
+  readonly type: ChatType;
 
   @IsDateString()
   @IsNotEmpty()

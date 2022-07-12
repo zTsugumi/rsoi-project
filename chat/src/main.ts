@@ -12,7 +12,7 @@ import { HttpExceptionFilter } from './exception/http-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const appConfig: AppConfigService = await app.get(AppConfigService);
+  const appConfig = app.get(AppConfigService);
   const appReflector = app.get(Reflector);
 
   app.setGlobalPrefix(APIPrefix.version);
@@ -20,7 +20,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(appReflector));
 
-  app.listen(appConfig.port, () => {
+  await app.listen(appConfig.port, () => {
     Logger.log(`chat is listening on ${appConfig.port}...`, 'Main');
   });
 }

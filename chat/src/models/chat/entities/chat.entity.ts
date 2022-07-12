@@ -1,9 +1,10 @@
 import { AbstractEntity } from '../../../common/entities';
 import { Column, Entity } from 'typeorm';
+import ChatType from '../enums/chatType.enum';
 
 @Entity({ name: 'chats' })
 export class ChatEntity extends AbstractEntity {
-  @Column({ type: 'varchar', length: 20000 })
+  @Column({ type: 'varchar', length: 20000, nullable: false })
   public content: string;
 
   @Column()
@@ -12,9 +13,13 @@ export class ChatEntity extends AbstractEntity {
   @Column()
   public userUUID: string;
 
-  @Column()
-  public type: string;
+  @Column({
+    type: 'enum',
+    enum: ChatType,
+    default: ChatType.text,
+  })
+  public type: ChatType;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', nullable: false })
   public atTime: Date;
 }
