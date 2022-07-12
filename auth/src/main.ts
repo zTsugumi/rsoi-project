@@ -14,7 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
 
-  const appConfig: AppConfigService = await app.get(AppConfigService);
+  const appConfig = app.get(AppConfigService);
   const appReflector = app.get(Reflector);
 
   app.setGlobalPrefix(APIPrefix.version);
