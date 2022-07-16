@@ -1,25 +1,37 @@
-import { HttpService } from '@nestjs/axios';
-import { Controller, Get, HttpException, Query } from '@nestjs/common';
-import { map, catchError, Observable } from 'rxjs';
-import { AppConfigService } from 'src/config/app/config.service';
+import { Controller, Get, Query, Req } from '@nestjs/common';
+import { Request } from 'express';
+import { AppConfigService } from '../../config/app/config.service';
+import { StatisticService } from '../statistic/statistic.service';
 import { PaginationRequestDto, PaginationResponseDto } from './dtos/pagination.dto';
+import { RoomService } from './room.service';
 
 @Controller()
 export class RoomController {
   constructor(
     private readonly _appConfig: AppConfigService,
-    private readonly _httpService: HttpService,
+    private readonly _statisticService: StatisticService,
+    private readonly _roomService: RoomService,
   ) {}
 
   @Get('rooms')
-  public getRooms(@Query() pagination: PaginationRequestDto): Observable<PaginationResponseDto> {
-    const url = this._appConfig.urlRoom + '/rooms';
+  public async getRooms(
+    @Req() request: Request,
+    @Query() pagination: PaginationRequestDto,
+  ): Promise<PaginationResponseDto> {
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
 
-    return this._httpService.get(url, { params: pagination }).pipe(
-      map((response) => response.data),
-      catchError((err) => {
-        throw new HttpException(err.response.data.message, err.response.data.statusCode);
-      }),
-    );
+    const rooms = await this._roomService.getRooms(pagination);
+
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Succeeded`,
+      atTime: new Date().toISOString(),
+    });
+
+    return rooms;
   }
 }

@@ -17,6 +17,7 @@ import configuration from './configuration';
         URL_AUTH: Joi.string(),
         URL_ROOM: Joi.string(),
         URL_CHAT: Joi.string(),
+        URL_STAT: Joi.string(),
         CORS_ORIGIN: Joi.string(),
       }),
     }),

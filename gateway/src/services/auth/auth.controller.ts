@@ -12,6 +12,7 @@ import {
 import { Request, Response } from 'express';
 import { map, catchError, Observable } from 'rxjs';
 import { AppConfigService } from '../../config/app/config.service';
+import { StatisticService } from '../statistic/statistic.service';
 import { LoginRequestDto, LoginResponseDto } from './dtos/login.dto';
 import { RegisterRequestDto, RegisterResponseDto } from './dtos/register.dto';
 
@@ -19,17 +20,30 @@ import { RegisterRequestDto, RegisterResponseDto } from './dtos/register.dto';
 export class AuthController {
   constructor(
     private readonly _appConfig: AppConfigService,
+    private readonly _statisticService: StatisticService,
     private readonly _httpService: HttpService,
   ) {}
 
   @Post('signup')
   async register(
+    @Req() request: Request,
     @Body() registrationData: RegisterRequestDto,
   ): Promise<Observable<RegisterResponseDto>> {
-    const url = this._appConfig.urlAuth + '/signup';
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
 
+    const url = this._appConfig.urlAuth + '/signup';
     return this._httpService.post(url, registrationData).pipe(
       map((response) => {
+        this._statisticService.addStatistic({
+          service: this._appConfig.name,
+          description: `${request.method}${request.url}: Succeeded`,
+          atTime: new Date().toISOString(),
+        });
+
         return response.data;
       }),
       catchError((err) => {
@@ -40,13 +54,25 @@ export class AuthController {
 
   @Post('signin')
   async login(
+    @Req() request: Request,
     @Body() loginData: LoginRequestDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<Observable<LoginResponseDto>> {
-    const url = this._appConfig.urlAuth + '/signin';
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
 
+    const url = this._appConfig.urlAuth + '/signin';
     return this._httpService.post(url, loginData, { withCredentials: true }).pipe(
       map((res) => {
+        this._statisticService.addStatistic({
+          service: this._appConfig.name,
+          description: `${request.method}${request.url}: Succeeded`,
+          atTime: new Date().toISOString(),
+        });
+
         response.setHeader('Set-Cookie', res.headers['set-cookie']);
         return res.data;
       }),
@@ -58,14 +84,25 @@ export class AuthController {
 
   @Get('signout')
   async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
-    const url = this._appConfig.urlAuth + '/signout';
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
 
+    const url = this._appConfig.urlAuth + '/signout';
     return this._httpService
       .get(url, {
         headers: { cookie: request.headers.cookie ?? '' },
       })
       .pipe(
         map((res) => {
+          this._statisticService.addStatistic({
+            service: this._appConfig.name,
+            description: `${request.method}${request.url}: Succeeded`,
+            atTime: new Date().toISOString(),
+          });
+
           response.setHeader('Set-Cookie', res.headers['set-cookie']);
           return res.data;
         }),
@@ -77,8 +114,13 @@ export class AuthController {
 
   @Get('auth')
   authenticate(@Req() request: Request) {
-    const url = this._appConfig.urlAuth + '/auth';
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
 
+    const url = this._appConfig.urlAuth + '/auth';
     return this._httpService
       .get(url, {
         headers: {
@@ -87,6 +129,12 @@ export class AuthController {
       })
       .pipe(
         map((res) => {
+          this._statisticService.addStatistic({
+            service: this._appConfig.name,
+            description: `${request.method}${request.url}: Succeeded`,
+            atTime: new Date().toISOString(),
+          });
+
           return res.data;
         }),
         catchError((err) => {
@@ -96,11 +144,25 @@ export class AuthController {
   }
 
   @Get('names')
-  public async getNames(@Body(new ParseArrayPipe({ items: String })) usersUUID: String[]) {
-    const url = this._appConfig.urlAuth + '/names';
+  public async getNames(
+    @Req() request: Request,
+    @Body(new ParseArrayPipe({ items: String })) usersUUID: String[],
+  ) {
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
 
+    const url = this._appConfig.urlAuth + '/names';
     return this._httpService.get(url, { data: usersUUID }).pipe(
       map((res) => {
+        this._statisticService.addStatistic({
+          service: this._appConfig.name,
+          description: `${request.method}${request.url}: Succeeded`,
+          atTime: new Date().toISOString(),
+        });
+
         return res.data;
       }),
       catchError((err) => {

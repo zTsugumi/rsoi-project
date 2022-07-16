@@ -1,15 +1,13 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { AppConfigModule } from '../../config/app/config.module';
 import { AppConfigService } from '../../config/app/config.service';
-import { StatisticModule } from '../statistic/statistic.module';
-import { RoomController } from './room.controller';
-import { RoomService } from './room.service';
+import { AppConfigModule } from '../../config/app/config.module';
+import { StatisticService } from './statistic.service';
+import { StatisticController } from './statistic.controller';
 
 @Module({
   imports: [
     AppConfigModule,
-    StatisticModule,
     HttpModule.registerAsync({
       imports: [AppConfigModule],
       useFactory: async (appConfig: AppConfigService) => ({
@@ -19,7 +17,8 @@ import { RoomService } from './room.service';
       inject: [AppConfigService],
     }),
   ],
-  providers: [RoomService],
-  controllers: [RoomController],
+  controllers: [StatisticController],
+  providers: [StatisticService],
+  exports: [StatisticService]
 })
-export class RoomModule {}
+export class StatisticModule {}

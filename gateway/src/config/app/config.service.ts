@@ -32,6 +32,9 @@ export class AppConfigService {
   get urlChat(): string {
     return this.configService.get<string>('app.urlChat');
   }
+  get urlStat(): string {
+    return this.configService.get<string>('app.urlStat');
+  }
   get corsOrigin(): string {
     return this.configService.get<string>('app.corsOrigin');
   }

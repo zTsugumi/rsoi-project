@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, MaxLength } from 'class-validator';
 
 export class RoomInfoDto {
   @IsUUID()
@@ -7,9 +7,11 @@ export class RoomInfoDto {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(50)
   readonly name: string;
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(200)
   readonly description: string;
 }

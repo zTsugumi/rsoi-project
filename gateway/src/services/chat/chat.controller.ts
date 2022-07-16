@@ -1,24 +1,36 @@
-import { HttpService } from '@nestjs/axios';
-import { map, catchError } from 'rxjs';
-import { Controller, Get, HttpException, Param, ParseUUIDPipe } from '@nestjs/common';
-import { AppConfigService } from 'src/config/app/config.service';
+import { Request } from 'express';
+import { Controller, Get, Param, ParseUUIDPipe, Req } from '@nestjs/common';
+import { AppConfigService } from '../../config/app/config.service';
+import { StatisticService } from '../statistic/statistic.service';
+import { ChatService } from './chat.service';
 
 @Controller('chats')
 export class ChatController {
   constructor(
     private readonly _appConfig: AppConfigService,
-    private readonly _httpService: HttpService,
+    private readonly _statisticService: StatisticService,
+    private readonly _chatService: ChatService,
   ) {}
 
   @Get(':roomUUID')
-  public async getChats(@Param('roomUUID', new ParseUUIDPipe()) roomUUID: string) {
-    const url = `${this._appConfig.urlChat}/chats/${roomUUID}`;
+  public async getChats(
+    @Req() request: Request,
+    @Param('roomUUID', new ParseUUIDPipe()) roomUUID: string,
+  ) {
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
 
-    return this._httpService.get(url, { params: { roomUUID: roomUUID } }).pipe(
-      map((response) => response.data),
-      catchError((err) => {
-        throw new HttpException(err.response.data.message, err.response.data.statusCode);
-      }),
-    );
+    const chats = await this._chatService.getChats(roomUUID);
+
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Succeeded`,
+      atTime: new Date().toISOString(),
+    });
+
+    return chats;
   }
 }

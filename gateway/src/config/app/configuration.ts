@@ -11,4 +11,5 @@ export default registerAs('app', () => ({
   urlAuth: process.env.URL_AUTH,
   urlRoom: process.env.URL_ROOM,
   urlChat: process.env.URL_CHAT,
+  urlStat: process.env.URL_STAT,
 }));
