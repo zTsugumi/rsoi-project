@@ -9,9 +9,17 @@ import configuration from './configuration';
     ConfigModule.forRoot({
       load: [configuration],
       validationSchema: Joi.object({
-        APP_ENV: Joi.string().valid('development', 'production', 'test', 'provision'),
+        APP_ENV: Joi.string().valid(
+          'development',
+          'production',
+          'test',
+          'provision',
+        ),
         APP_NAME: Joi.string().default('auth'),
         PORT: Joi.number(),
+        HTTP_TIMEOUT: Joi.number(),
+        HTTP_MAX_REDIRECTS: Joi.number(),
+        URL_STAT: Joi.string(),
       }),
     }),
   ],

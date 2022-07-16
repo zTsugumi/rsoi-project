@@ -8,20 +8,43 @@ import {
   Res,
   Get,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dtos/register.dto';
 import { RequestWithUser } from './interfaces/requestWithUser.interface';
 import { LocalAuthGuard } from './guards/local.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { StatisticService } from '../statistic/statistic.service';
+import { AppConfigService } from 'src/config/app/config.service';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly _authService: AuthService) {}
+  constructor(
+    private readonly _appConfig: AppConfigService,
+    private readonly _statisticService: StatisticService,
+    private readonly _authService: AuthService,
+  ) {}
 
   @Post('signup')
-  async register(@Body() registrationData: RegisterDto) {
-    return this._authService.register(registrationData);
+  async register(
+    @Req() request: Request,
+    @Body() registrationData: RegisterDto,
+  ) {
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
+
+    const newUser = await this._authService.register(registrationData);
+
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Succeeded`,
+      atTime: new Date().toISOString(),
+    });
+
+    return newUser;
   }
 
   @HttpCode(200)
@@ -31,12 +54,23 @@ export class AuthController {
     @Req() request: RequestWithUser,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const { user } = request;
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
 
+    const { user } = request;
     response.setHeader(
       'Set-Cookie',
       this._authService.getCookieWithJwt(user.id),
     );
+
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Succeeded`,
+      atTime: new Date().toISOString(),
+    });
 
     return user;
   }
@@ -44,14 +78,42 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   @Get('signout')
-  async logout(@Res({ passthrough: true }) response: Response) {
+  async logout(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
+
     response.setHeader('Set-Cookie', this._authService.getCookieForLogOut());
+
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Succeeded`,
+      atTime: new Date().toISOString(),
+    });
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('auth')
   authenticate(@Req() request: RequestWithUser) {
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
+
     const user = request.user;
+
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Succeeded`,
+      atTime: new Date().toISOString(),
+    });
+
     return user;
   }
 }

@@ -17,4 +17,13 @@ export class AppConfigService {
   get port(): number {
     return Number(this.configService.get<number>('app.port'));
   }
+  get httpTimeout(): number {
+    return Number(this.configService.get<number>('app.httpTimeout'));
+  }
+  get httpMaxDirect(): number {
+    return Number(this.configService.get<number>('app.httpMaxDirect'));
+  }
+  get urlStat(): string {
+    return this.configService.get<string>('app.urlStat');
+  }
 }

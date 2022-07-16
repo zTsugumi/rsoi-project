@@ -8,12 +8,16 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtConfigModule } from '../../config/jwt/config.module';
 import { JwtConfigService } from '../../config/jwt/config.service';
+import { StatisticModule } from '../statistic/statistic.module';
+import { AppConfigModule } from 'src/config/app/config.module';
 
 @Module({
   imports: [
     UserModule,
     PassportModule,
     JwtConfigModule,
+    StatisticModule,
+    AppConfigModule,
     JwtModule.registerAsync({
       imports: [JwtConfigModule],
       inject: [JwtConfigService],
