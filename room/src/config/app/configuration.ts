@@ -5,4 +5,7 @@ export default registerAs('app', () => ({
   name: process.env.APP_NAME,
   host: process.env.APP_HOST,
   port: process.env.PORT,
+  httpTimeout: process.env.HTTP_TIMEOUT,
+  httpMaxDirect: process.env.HTTP_MAX_REDIRECTS,
+  urlStat: process.env.URL_STAT,
 }));
