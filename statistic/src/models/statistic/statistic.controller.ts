@@ -5,9 +5,10 @@ import {
   Get,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
-import * as path from 'path';
-import { AppConfigService } from 'src/config/app/config.service';
+import { Request } from 'express';
+import { AppConfigService } from '../../config/app/config.service';
 import { StatisticEntity } from './entities/statistic.entity';
 import { StatisticService } from './statistic.service';
 
@@ -18,27 +19,21 @@ export class StatisticController {
     private readonly _statisticService: StatisticService,
   ) {}
 
-  curPath = path.relative(process.cwd(), __filename);
-
   @Get()
   public async getStatistics(
+    @Req() request: Request,
     @Query('service') service: string,
     @Query('fromDate') fromDate?: string,
     @Query('toDate') toDate?: string,
   ) {
     if (!service) {
-      this._statisticService.addStatistic({
-        service: this._appConfig.name,
-        description: `${this.curPath} - Error 400: service name not provided`,
-        atTime: new Date(),
-      });
-      throw new BadRequestException();
+      throw new BadRequestException('Service name needed');
     } else {
       await this._statisticService.addStatistic({
         service: this._appConfig.name,
-        description: `Get stat of service ${service} from ${
-          fromDate ?? null
-        } to ${toDate ?? null}`,
+        description: `${request.method}${
+          request.url
+        }: Service ${service} from ${fromDate ?? null} to ${toDate ?? null}`,
         atTime: new Date(),
       });
     }
@@ -51,10 +46,13 @@ export class StatisticController {
   }
 
   @Post()
-  public async addStatistic(@Body() statistic: Partial<StatisticEntity>) {
+  public async addStatistic(
+    @Req() request: Request,
+    @Body() statistic: Partial<StatisticEntity>,
+  ) {
     await this._statisticService.addStatistic({
       service: this._appConfig.name,
-      description: `Add stat of service ${statistic.service}`,
+      description: `${request.method}${request.url}: Service ${statistic.service}`,
       atTime: new Date(),
     });
 
