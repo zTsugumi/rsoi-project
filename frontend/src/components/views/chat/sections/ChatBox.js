@@ -64,7 +64,6 @@ function ChatBox(props) {
             {props.message.senderName}
           </button>
         }
-        // author={<b>{props.message.senderName}</b>}
         content={<p>{props.message.content}</p>}
         datetime={
           <Tooltip title={moment(props.message.atTime).format('YYYY-MM-DD HH:mm:ss')}>
@@ -75,51 +74,71 @@ function ChatBox(props) {
     </div>
   );
 
-  return curRoom ? (
-    chat.isLoading ? (
-      <div className='chatbox-list'>
-        <Loading />
-      </div>
-    ) : (
-      <div className='chatbox-list'>
-        <Row className='chatbox-header'>
-          <Title level={4}>Chat Box</Title>
-        </Row>
-        <Row className='chatbox-body'>
-          <ChatFeed chatBubble={customBubble} messages={chat.msgs} />
-        </Row>
-        <Row className='chatbar'>
-          <Col span={22}>
-            <Input
-              id='msg'
-              prefix={<MessageOutlined className='chat__icon_color' />}
-              placeholder="Let's start chatting"
-              type='text'
-              value={chatMsg}
-              maxLength={20000}
-              onPressEnter={handleSubmitChat}
-              onChange={(e) => setChatMsg(e.target.value)}
+  if (curRoom) {
+    if (chat.isLoading) {
+      return (
+        <div className='chatbox-list'>
+          <Loading />
+        </div>
+      );
+    } else {
+      if (Array.isArray(chat.msgs)) {
+        return (
+          <div className='chatbox-list'>
+            <Row className='chatbox-header'>
+              <Title level={4}>Chat Box</Title>
+            </Row>
+            <Row className='chatbox-body'>
+              <ChatFeed chatBubble={customBubble} messages={chat.msgs} />
+            </Row>
+            <Row className='chatbar'>
+              <Col span={22}>
+                <Input
+                  id='msg'
+                  prefix={<MessageOutlined className='chat__icon_color' />}
+                  placeholder="Let's start chatting"
+                  type='text'
+                  value={chatMsg}
+                  maxLength={20000}
+                  onPressEnter={handleSubmitChat}
+                  onChange={(e) => setChatMsg(e.target.value)}
+                />
+              </Col>
+              <Col span={2}>
+                <Button
+                  className='chat__button'
+                  type='primary'
+                  onClick={handleSubmitChat}
+                  htmlType='submit'
+                >
+                  <EnterOutlined />
+                </Button>
+              </Col>
+            </Row>
+            <UserModal userModalInfo={userModalInfo} setUserModalInfo={setUserModalInfo} />
+          </div>
+        );
+      } else {
+        return (
+          <div className='chatbox-list'>
+            <Empty
+              description={
+                <span>
+                  Oops, Something happened! We are working on the problem, please come back later!
+                </span>
+              }
             />
-          </Col>
-          <Col span={2}>
-            <Button
-              className='chat__button'
-              type='primary'
-              onClick={handleSubmitChat}
-              htmlType='submit'
-            >
-              <EnterOutlined />
-            </Button>
-          </Col>
-        </Row>
-        <UserModal userModalInfo={userModalInfo} setUserModalInfo={setUserModalInfo} />
+          </div>
+        );
+      }
+    }
+  } else {
+    return (
+      <div className='chatbox-list'>
+        <Empty description={<span>Welcome to ...! Please select a room to start chating!</span>} />
       </div>
-    )
-  ) : (
-    <div className='chatbox-list'>
-      <Empty description={<span>Welcome to ...! Please select a room to start chating!</span>} />
-    </div>
-  );
+    );
+  }
 }
 
 export default ChatBox;

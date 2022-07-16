@@ -35,7 +35,7 @@
 }
 
 .chat-messages {
-  height: 65vh !important;
+  height: 60vh !important;
 }
 
 .link-button {
@@ -52,4 +52,8 @@
 .link-button:active,
 .link-button:visited {
   color: blue;
+}
+
+.ant-comment-inner {
+  padding: 0.5rem 0;
 }
