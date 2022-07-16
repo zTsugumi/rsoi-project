@@ -20,6 +20,7 @@ import configuration from './configuration';
         HTTP_TIMEOUT: Joi.number(),
         HTTP_MAX_REDIRECTS: Joi.number(),
         URL_GW: Joi.string(),
+        URL_STAT: Joi.string(),
       }),
     }),
   ],

@@ -6,9 +6,16 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { AppConfigService } from '../config/app/config.service';
+import { StatisticService } from '../models/statistic/statistic.service';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+  constructor(
+    private readonly _statisticService: StatisticService,
+    private readonly _appConfig: AppConfigService,
+  ) {}
+
   catch(exception: unknown, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
@@ -21,6 +28,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.message
         : 'Internal Server Error';
+
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Error ${status} - ${msg}`,
+      atTime: new Date().toISOString(),
+    });
 
     response.status(status).json({
       statusCode: status,

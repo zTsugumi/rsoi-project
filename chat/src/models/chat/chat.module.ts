@@ -6,10 +6,12 @@ import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
 import { AppConfigModule } from '../../config/app/config.module';
 import { AppConfigService } from '../../config/app/config.service';
+import { StatisticModule } from '../statistic/statistic.module';
 
 @Module({
   imports: [
     AppConfigModule,
+    StatisticModule,
     HttpModule.registerAsync({
       imports: [AppConfigModule],
       useFactory: async (appConfig: AppConfigService) => ({

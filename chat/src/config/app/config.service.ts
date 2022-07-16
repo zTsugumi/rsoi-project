@@ -26,4 +26,7 @@ export class AppConfigService {
   get urlGW(): string {
     return this.configService.get<string>('app.urlGW');
   }
+  get urlStat(): string {
+    return this.configService.get<string>('app.urlStat');
+  }
 }

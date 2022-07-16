@@ -8,4 +8,5 @@ export default registerAs('app', () => ({
   httpTimeout: process.env.HTTP_TIMEOUT,
   httpMaxDirect: process.env.HTTP_MAX_REDIRECTS,
   urlGW: process.env.URL_GW,
+  urlStat: process.env.URL_STAT,
 }));
