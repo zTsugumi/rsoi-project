@@ -142,32 +142,4 @@ export class AuthController {
         }),
       );
   }
-
-  @Get('names')
-  public async getNames(
-    @Req() request: Request,
-    @Body(new ParseArrayPipe({ items: String })) usersUUID: String[],
-  ) {
-    this._statisticService.addStatistic({
-      service: this._appConfig.name,
-      description: `${request.method}${request.url}: Pending`,
-      atTime: new Date().toISOString(),
-    });
-
-    const url = this._appConfig.urlAuth + '/names';
-    return this._httpService.get(url, { data: usersUUID }).pipe(
-      map((res) => {
-        this._statisticService.addStatistic({
-          service: this._appConfig.name,
-          description: `${request.method}${request.url}: Succeeded`,
-          atTime: new Date().toISOString(),
-        });
-
-        return res.data;
-      }),
-      catchError((err) => {
-        throw new HttpException(err.response.data.message, err.response.data.statusCode);
-      }),
-    );
-  }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import * as circuitBreaker from '@bennadel/circuit-breaker';
-import { AppConfigService } from '../../config/app/config.service';
 import { firstValueFrom, map } from 'rxjs';
+import { AppConfigService } from '../../config/app/config.service';
+import * as circuitBreaker from '@bennadel/circuit-breaker';
 
 @Injectable()
 export class ChatService {

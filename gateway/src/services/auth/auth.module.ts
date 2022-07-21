@@ -4,6 +4,8 @@ import { AppConfigModule } from '../../config/app/config.module';
 import { AppConfigService } from '../../config/app/config.service';
 import { StatisticModule } from '../statistic/statistic.module';
 import { AuthController } from './auth.controller';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { AuthController } from './auth.controller';
       inject: [AppConfigService],
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UserController],
+  providers: [UserService],
 })
 export class AuthModule {}
