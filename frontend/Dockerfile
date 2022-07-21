@@ -5,11 +5,10 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM node:14.16.1-alpine3.13 as production
-WORKDIR /app
-COPY --from=builder /app/package.json /app/package.json
-COPY --from=builder /app/dist /app/dist
-COPY --from=builder /app/node_modules /app/node_modules
-EXPOSE 8080
+FROM nginx:alpine
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app/build/ /usr/share/nginx/html
+COPY --from=builder /nginx.conf /etc/nginx/conf.d/default.conf
 
-CMD ["node", "dist/main"]
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
