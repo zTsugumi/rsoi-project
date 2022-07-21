@@ -97,6 +97,7 @@ jobs:
 
   build_push:
     name: Build and Push to Docker Hub
+    needs: [auth, room, chat, statistic]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -116,39 +117,39 @@ jobs:
         with:
           context: ./gateway
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/CW-gateway:v1.0
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-gateway:v1.0
 
       - name: Build and Push Auth
         uses: docker/build-push-action@v2
         with:
           context: ./auth
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/CW-auth:v1.0
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-auth:v1.0
 
       - name: Build and Push Room
         uses: docker/build-push-action@v2
         with:
           context: ./room
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/CW-room:v1.0
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-room:v1.0
 
       - name: Build and Push Chat
         uses: docker/build-push-action@v2
         with:
           context: ./chat
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/CW-chat:v1.0
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-chat:v1.0
 
       - name: Build and Push Statistic
         uses: docker/build-push-action@v2
         with:
           context: ./statistic
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/CW-statistic:v1.0
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-statistic:v1.0
 
       - name: Build and Push Frontend
         uses: docker/build-push-action@v2
         with:
           context: ./frontend
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/CW-frontend:v1.0
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-frontend:v1.0
