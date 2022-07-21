@@ -2,7 +2,7 @@ import { CHAT_REQUEST, CHAT_SUCCESS, CHAT_FAILURE, CHAT_RECV } from '../actions/
 
 const chat = (
   state = {
-    isLoading: true,
+    isLoading: null,
     msgs: [],
   },
   action

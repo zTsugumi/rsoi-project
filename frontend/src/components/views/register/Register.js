@@ -9,7 +9,6 @@ import AllActions from '../../../redux/actions/allActions';
 import { Loading } from '../../loading/Loading';
 import './Register.css';
 
-
 const { Title } = Typography;
 
 const formItemLayout = {
@@ -23,18 +22,16 @@ const formItemLayout = {
   },
 };
 
-function Register(props) {
+function Register() {
   const [formError, setFormError] = useState('');
   const history = useHistory();
-  // const { user, signupUser } = props;
 
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const signupUser = (creds) => dispatch(AllActions.UserActions.signupUser(creds));
 
   useEffect(() => {
     if (user.regSuccess === true) {
-      history.push('/login');
+      history.push('/signin');
     } else if (user.regSuccess === false) {
       setFormError(`Sorry, we couldn't register your account. ${user.errMess}.`);
     }
@@ -56,7 +53,7 @@ function Register(props) {
       .required('Confirm Password is required'),
   });
 
-  const handleSubmit = async (values, actions) => {
+  const handleOnSubmit = async (values, actions) => {
     actions.setSubmitting(true);
 
     const creds = {
@@ -66,7 +63,7 @@ function Register(props) {
       lastName: values.lastname,
     };
 
-    await signupUser(creds);
+    dispatch(AllActions.UserActions.signupUser(creds));
 
     actions.setSubmitting(false);
   };
@@ -77,71 +74,71 @@ function Register(props) {
         <Loading />
       </div>
     );
-  } else {
-    return (
-      <Formik
-        initialValues={{
-          email: '',
-          firtname: '',
-          lastName: '',
-          password: '',
-          confirmPassword: '',
-        }}
-        validationSchema={signupValidationSchema}
-        onSubmit={handleSubmit}
-      >
-        {(props) => (
-          <div className='app'>
-            <Title level={2}>Sign up</Title>
-            <Form {...formItemLayout} className='form'>
-              <FormItem className='form__item' name='firstname' label='First Name' required={true}>
-                <Input name='firstname' placeholder='Enter your First Name' />
-              </FormItem>
-              <FormItem className='form__item' name='lastname' label='Last Name' required={true}>
-                <Input name='lastname' placeholder='Enter your Last Name' />
-              </FormItem>
-              <FormItem
-                className='form__item'
-                name='email'
-                label='Email'
-                required={true}
-                hasFeedback={true}
-                showValidateSuccess={true}
-              >
-                <Input name='email' placeholder='Enter your Email' />
-              </FormItem>
-              <FormItem
-                className='form__item'
-                name='password'
-                label='Password'
-                required={true}
-                hasFeedback={true}
-                showValidateSuccess={true}
-              >
-                <Input.Password name='password' placeholder='Enter your password' />
-              </FormItem>
-              <FormItem
-                className='form__item'
-                name='confirmPassword'
-                label='Confirm'
-                required={true}
-                hasFeedback={true}
-                showValidateSuccess={true}
-              >
-                <Input.Password name='confirmPassword' placeholder='Confirm your password' />
-              </FormItem>
-              {formError && (
-                <label>
-                  <p className='form__item form__error'>{formError}</p>
-                </label>
-              )}
-              <SubmitButton className='register-form-button'>Submit</SubmitButton>
-            </Form>
-          </div>
-        )}
-      </Formik>
-    );
   }
+
+  return (
+    <Formik
+      initialValues={{
+        email: '',
+        firtname: '',
+        lastName: '',
+        password: '',
+        confirmPassword: '',
+      }}
+      validationSchema={signupValidationSchema}
+      onSubmit={handleOnSubmit}
+    >
+      {(props) => (
+        <div className='app'>
+          <Title level={2}>Sign up</Title>
+          <Form {...formItemLayout} className='form'>
+            <FormItem className='form__item' name='firstname' label='First Name' required={true}>
+              <Input name='firstname' placeholder='Enter your First Name' />
+            </FormItem>
+            <FormItem className='form__item' name='lastname' label='Last Name' required={true}>
+              <Input name='lastname' placeholder='Enter your Last Name' />
+            </FormItem>
+            <FormItem
+              className='form__item'
+              name='email'
+              label='Email'
+              required={true}
+              hasFeedback={true}
+              showValidateSuccess={true}
+            >
+              <Input name='email' placeholder='Enter your Email' />
+            </FormItem>
+            <FormItem
+              className='form__item'
+              name='password'
+              label='Password'
+              required={true}
+              hasFeedback={true}
+              showValidateSuccess={true}
+            >
+              <Input.Password name='password' placeholder='Enter your password' />
+            </FormItem>
+            <FormItem
+              className='form__item'
+              name='confirmPassword'
+              label='Confirm'
+              required={true}
+              hasFeedback={true}
+              showValidateSuccess={true}
+            >
+              <Input.Password name='confirmPassword' placeholder='Confirm your password' />
+            </FormItem>
+            {formError && (
+              <label>
+                <p className='form__item form__error'>{formError}</p>
+              </label>
+            )}
+            <SubmitButton className='register-form-button'>Submit</SubmitButton>
+          </Form>
+        </div>
+      )}
+    </Formik>
+  );
 }
 
 export default Register;

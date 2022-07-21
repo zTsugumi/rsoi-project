@@ -74,68 +74,67 @@ function ChatBox(props) {
     </div>
   );
 
-  if (curRoom) {
-    if (chat.isLoading) {
-      return (
-        <div className='chatbox-list'>
-          <Loading />
-        </div>
-      );
-    } else {
-      if (Array.isArray(chat.msgs)) {
-        return (
-          <div className='chatbox-list'>
-            <Row className='chatbox-header'>
-              <Title level={4}>Chat Box</Title>
-            </Row>
-            <Row className='chatbox-body'>
-              <ChatFeed chatBubble={customBubble} messages={chat.msgs} />
-            </Row>
-            <Row className='chatbar'>
-              <Col span={22}>
-                <Input
-                  id='msg'
-                  prefix={<MessageOutlined className='chat__icon_color' />}
-                  placeholder="Let's start chatting"
-                  type='text'
-                  value={chatMsg}
-                  maxLength={20000}
-                  onPressEnter={handleSubmitChat}
-                  onChange={(e) => setChatMsg(e.target.value)}
-                />
-              </Col>
-              <Col span={2}>
-                <Button
-                  className='chat__button'
-                  type='primary'
-                  onClick={handleSubmitChat}
-                  htmlType='submit'
-                >
-                  <EnterOutlined />
-                </Button>
-              </Col>
-            </Row>
-            <UserModal userModalInfo={userModalInfo} setUserModalInfo={setUserModalInfo} />
-          </div>
-        );
-      } else {
-        return (
-          <div className='chatbox-list'>
-            <Empty
-              description={
-                <span>
-                  Oops, Something happened! We are working on the problem, please come back later!
-                </span>
-              }
-            />
-          </div>
-        );
-      }
-    }
-  } else {
+  if (!curRoom)
     return (
       <div className='chatbox-list'>
         <Empty description={<span>Welcome to ...! Please select a room to start chating!</span>} />
+      </div>
+    );
+
+  if (chat.isLoading) {
+    return (
+      <div className='chatbox-list'>
+        <Loading />
+      </div>
+    );
+  }
+
+  if (Array.isArray(chat.msgs)) {
+    return (
+      <div className='chatbox-list'>
+        <Row className='chatbox-header'>
+          <Title level={4}>Chat Box</Title>
+        </Row>
+        <Row className='chatbox-body'>
+          <ChatFeed chatBubble={customBubble} messages={chat.msgs} />
+        </Row>
+        <Row className='chatbar'>
+          <Col span={22}>
+            <Input
+              id='msg'
+              prefix={<MessageOutlined className='chat__icon_color' />}
+              placeholder="Let's start chatting"
+              type='text'
+              value={chatMsg}
+              maxLength={20000}
+              onPressEnter={handleSubmitChat}
+              onChange={(e) => setChatMsg(e.target.value)}
+            />
+          </Col>
+          <Col span={2}>
+            <Button
+              className='chat__button'
+              type='primary'
+              onClick={handleSubmitChat}
+              htmlType='submit'
+            >
+              <EnterOutlined />
+            </Button>
+          </Col>
+        </Row>
+        <UserModal userModalInfo={userModalInfo} setUserModalInfo={setUserModalInfo} />
+      </div>
+    );
+  } else {
+    return (
+      <div className='chatbox-list'>
+        <Empty
+          description={
+            <span>
+              Oops, Something happened! We are working on the problem, please come back later!
+            </span>
+          }
+        />
       </div>
     );
   }

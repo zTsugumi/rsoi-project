@@ -1,17 +1,28 @@
 import {
-  SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE,
-  SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE,
-  SIGNOUT_REQUEST, SIGNOUT_SUCCESS, SIGNOUT_FAILURE,
-  AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAILURE,
+  SIGNUP_REQUEST,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILURE,
+  SIGNIN_REQUEST,
+  SIGNIN_SUCCESS,
+  SIGNIN_FAILURE,
+  SIGNOUT_REQUEST,
+  SIGNOUT_SUCCESS,
+  SIGNOUT_FAILURE,
+  AUTH_REQUEST,
+  AUTH_SUCCESS,
+  AUTH_FAILURE,
 } from '../actions/allTypes';
 
-const users = (state = {
-  isLoading: true,
-  creds: null,
-  errMess: null,
-  regSuccess: null,
-  logSuccess: null,
-}, action) => {
+const user = (
+  state = {
+    isLoading: null,
+    creds: null,
+    errMess: null,
+    regSuccess: null,
+    logSuccess: null,
+  },
+  action
+) => {
   switch (action.type) {
     case SIGNUP_REQUEST:
       return {
@@ -20,7 +31,7 @@ const users = (state = {
         creds: null,
         regSuccess: false,
         logSuccess: null,
-        errMess: null
+        errMess: null,
       };
     case SIGNUP_SUCCESS:
       return {
@@ -29,7 +40,7 @@ const users = (state = {
         creds: null,
         regSuccess: true,
         logSuccess: null,
-        errMess: null
+        errMess: null,
       };
     case SIGNUP_FAILURE:
       return {
@@ -38,7 +49,7 @@ const users = (state = {
         creds: null,
         regSuccess: false,
         logSuccess: null,
-        errMess: action.payload
+        errMess: action.payload,
       };
 
     case SIGNIN_REQUEST:
@@ -48,7 +59,7 @@ const users = (state = {
         creds: null,
         regSuccess: null,
         logSuccess: false,
-        errMess: null
+        errMess: null,
       };
     case SIGNIN_SUCCESS:
       return {
@@ -57,7 +68,7 @@ const users = (state = {
         creds: action.payload,
         regSuccess: null,
         logSuccess: true,
-        errMess: null
+        errMess: null,
       };
     case SIGNIN_FAILURE:
       return {
@@ -66,7 +77,7 @@ const users = (state = {
         creds: null,
         regSuccess: null,
         logSuccess: false,
-        errMess: action.payload
+        errMess: action.payload,
       };
 
     case SIGNOUT_REQUEST:
@@ -76,8 +87,8 @@ const users = (state = {
         creds: null,
         regSuccess: null,
         logSuccess: null,
-        errMess: null
-      }
+        errMess: null,
+      };
     case SIGNOUT_SUCCESS:
       return {
         ...state,
@@ -85,7 +96,7 @@ const users = (state = {
         creds: null,
         regSuccess: null,
         logSuccess: null,
-        errMess: null
+        errMess: null,
       };
     case SIGNOUT_FAILURE:
       return {
@@ -94,7 +105,7 @@ const users = (state = {
         creds: null,
         regSuccess: null,
         logSuccess: null,
-        errMess: action.payload
+        errMess: action.payload,
       };
 
     case AUTH_REQUEST:
@@ -104,7 +115,7 @@ const users = (state = {
         creds: null,
         regSuccess: null,
         logSuccess: null,
-        errMess: null
+        errMess: null,
       };
     case AUTH_SUCCESS:
       return {
@@ -113,7 +124,7 @@ const users = (state = {
         creds: action.payload,
         regSuccess: null,
         logSuccess: null,
-        errMess: null
+        errMess: null,
       };
     case AUTH_FAILURE:
       return {
@@ -122,12 +133,12 @@ const users = (state = {
         creds: null,
         regSuccess: null,
         logSuccess: null,
-        errMess: action.payload
+        errMess: action.payload,
       };
 
     default:
       return state;
   }
-}
+};
 
-export default users;
+export default user;

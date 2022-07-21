@@ -1,0 +1,18 @@
+.profilebox {
+  padding: 1.5rem 0rem 2rem 2rem;
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+.searchbar {
+  padding-right: 2rem;
+  width: 100%;
+  display: flex;
+}
+
+.logbox {
+  padding-right: 2rem;
+  width: 100%;
+  display: flex;
+}

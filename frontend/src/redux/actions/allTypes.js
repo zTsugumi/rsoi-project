@@ -33,5 +33,15 @@ export const LEAVE_ROOM_FAILURE = 'LEAVE_ROOM_FAILURE';
 export const CHAT_REQUEST = 'CHAT_REQUEST';
 export const CHAT_SUCCESS = 'CHAT_SUCCESS';
 export const CHAT_FAILURE = 'CHAT_FAILURE';
-
 export const CHAT_RECV = 'CHAT_RECV';
+
+/****************************************** PROFILE *****************************************/
+export const PROFILE_REQUEST = 'PROFILE_REQUEST';
+export const PROFILE_SUCCESS = 'PROFILE_SUCCESS';
+export const PROFILE_FAILURE = 'PROFILE_FAILURE';
+export const PROFILE_RESET = 'PROFILE_RESET';
+
+/***************************************** STATISTIC ****************************************/
+export const STAT_REQUEST = 'STAT_REQUEST';
+export const STAT_SUCCESS = 'STAT_SUCCESS';
+export const STAT_FAILURE = 'STAT_FAILURE';

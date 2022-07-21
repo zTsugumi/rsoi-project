@@ -1,23 +1,24 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState, useEffect } from 'react';
-import { Menu } from 'antd';
+import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Dropdown, Menu, Space } from 'antd';
 import { withRouter, Link } from 'react-router-dom';
 import { Loading } from '../../loading/Loading';
 
 function RightMenu(props) {
   const { user, signoutUser } = props;
-  const [formLoading, setFormLoading] = useState(user.isLoading);
+  const [isUserLoading, setIsUserLoading] = useState(user.isLoading);
 
   // Effect for loading
   useEffect(() => {
-    setFormLoading(user.isLoading);
+    setIsUserLoading(user.isLoading);
 
     return () => {
-      setFormLoading(user.isLoading);
+      setIsUserLoading(user.isLoading);
     };
   }, [user.isLoading]);
 
-  if (formLoading) {
+  if (isUserLoading)
     return (
       <Menu mode={props.mode}>
         <Menu.Item key='loading'>
@@ -25,26 +26,68 @@ function RightMenu(props) {
         </Menu.Item>
       </Menu>
     );
+
+  if (!user.creds)
+    return (
+      <Menu mode={props.mode}>
+        <Menu.Item key='mail'>
+          <Link to='/signin'>Sign in</Link>
+        </Menu.Item>
+      </Menu>
+    );
+
+  if (props.mode === 'inline') {
+    return (
+      <Menu mode={props.mode}>
+        {/* WIP */}
+        <Menu.Item key='profile'>
+          <Link to={`/u/${user.creds.uuid}`}>
+            <Space>
+              <UserOutlined />
+              {`Signed in as ${user.creds.firstName}`}
+            </Space>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key='signout'>
+          <a onClick={() => signoutUser()}>
+            <Space>
+              <LogoutOutlined />
+              Sign out
+            </Space>
+          </a>
+        </Menu.Item>
+      </Menu>
+    );
   } else {
-    if (user.creds) {
-      return (
-        <Menu mode={props.mode}>
-          {/* WIP */}
-          <Menu.Item key='profile'>Logged in as {user.creds.firstName}</Menu.Item>
-          <Menu.Item key='logout'>
-            <a onClick={() => signoutUser()}>Sign out</a>
-          </Menu.Item>
-        </Menu>
-      );
-    } else {
-      return (
-        <Menu mode={props.mode}>
-          <Menu.Item key='mail'>
-            <Link to='/login'>Sign in</Link>
-          </Menu.Item>
-        </Menu>
-      );
-    }
+    const profileMenu = (
+      <Menu>
+        <Menu.Item key='profile'>
+          <Link to={`/u/${user.creds.uuid}`}>Your profile</Link>
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key='help'>Help -- WIP</Menu.Item>
+        <Menu.Item key='settings'>Settings -- WIP</Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key='signout'>
+          <a onClick={() => signoutUser()}>Sign out</a>
+        </Menu.Item>
+      </Menu>
+    );
+
+    return (
+      <Menu mode={props.mode}>
+        <Menu.Item key='profile_menu'>
+          <Dropdown overlay={profileMenu} trigger={['click']} placement='bottomRight'>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <UserOutlined />
+                {`Signed in as ${user.creds.firstName}`}
+              </Space>
+            </a>
+          </Dropdown>
+        </Menu.Item>
+      </Menu>
+    );
   }
 }
 

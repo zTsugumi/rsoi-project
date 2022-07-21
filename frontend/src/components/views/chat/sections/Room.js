@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { List, Typography, message } from 'antd';
 import AllActions from '../../../../redux/actions/allActions';
+import { Loading } from '../../../loading/Loading';
 import './Room.css';
 
 const { Title } = Typography;
@@ -48,6 +49,14 @@ function Room(props) {
     setCurRoom(item.uuid);
     dispatch(AllActions.ChatActions.chatGet(item.uuid));
   };
+
+  if (room.isLoading) {
+    return (
+      <div className='roombox-list'>
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <List

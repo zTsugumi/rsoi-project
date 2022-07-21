@@ -6,8 +6,9 @@ import Footer from './components/footer/Footer';
 import About from './components/views/about/About';
 import Home from './components/views/home/Home';
 import Chat from './components/views/chat/Chat';
-import Login from './components/views/login/Login';
+import Signin from './components/views/signin/Signin';
 import Register from './components/views/register/Register';
+import Profile from './components/views/profile/Profile';
 import AllActions from './redux/actions/allActions';
 
 function AuthRoute({ component: Component, ...rest }) {
@@ -46,8 +47,9 @@ function App() {
       >
         <Switch>
           <Route exact path='/' component={Home} />
-          <AuthRoute exact path='/login' component={Login} />
+          <AuthRoute exact path='/signin' component={Signin} />
           <AuthRoute exact path='/signup' component={Register} />
+          <Route path='/u/:userUUID' component={Profile} />
           <Route path='/about' component={About} />
           <Route path='/chat' component={Chat} />
         </Switch>

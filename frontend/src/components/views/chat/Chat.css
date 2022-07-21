@@ -8,7 +8,7 @@
   /* margin: 0rem 0rem 0rem 4rem; */
   padding: 1rem;
   border: 2px solid #f0f5ff;
-  border-radius: 15px;
+  border-radius: 10px;
   display: flex;
   height: 100%;
 }
@@ -17,7 +17,7 @@
   /* margin: 0rem 0rem 0rem 2rem; */
   padding: 1rem;
   border: 2px solid #f0f5ff;
-  border-radius: 15px;
+  border-radius: 10px;
   display: flex;
   height: 100%;
 }
