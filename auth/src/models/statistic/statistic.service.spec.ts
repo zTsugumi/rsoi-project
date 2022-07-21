@@ -2,12 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { StatisticService } from './statistic.service';
 import { of } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { AppConfigService } from '../../config/app/config.service';
 
 describe('StatisticService', () => {
   let statisticService: StatisticService;
   let httpService: HttpService;
 
-  class MockHttpService {
+  class HttpServiceMock {
     public get<T>() {
       return of({});
     }
@@ -15,13 +16,20 @@ describe('StatisticService', () => {
       return of({});
     }
   }
+
+  class AppConfigServiceMock {}
+
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
         StatisticService,
         {
           provide: HttpService,
-          useClass: MockHttpService,
+          useClass: HttpServiceMock,
+        },
+        {
+          provide: AppConfigService,
+          useClass: AppConfigServiceMock,
         },
       ],
     }).compile();

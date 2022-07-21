@@ -15,7 +15,7 @@ import { RequestWithUser } from './interfaces/requestWithUser.interface';
 import { LocalAuthGuard } from './guards/local.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { StatisticService } from '../statistic/statistic.service';
-import { AppConfigService } from 'src/config/app/config.service';
+import { AppConfigService } from '../../config/app/config.service';
 
 @Controller()
 export class AuthController {

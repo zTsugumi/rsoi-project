@@ -8,7 +8,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AppConfigService } from 'src/config/app/config.service';
+import { AppConfigService } from '../../config/app/config.service';
 import { StatisticService } from '../statistic/statistic.service';
 import { UserService } from './user.service';
 
