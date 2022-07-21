@@ -1,0 +1,27 @@
+version: '3'
+services:
+  postgres:
+    image: library/postgres:13.4-alpine
+    container_name: postgres
+    restart: on-failure
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./docker/postgres/:/docker-entrypoint-initdb.d/
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    networks:
+      - db-network
+networks:
+  service-network:
+    name: service-network
+    driver: bridge
+  db-network:
+    name: db-network
+    driver: bridge
+
+volumes:
+  db-data:

@@ -1,0 +1,23 @@
+.mainbox {
+  height: 90%;
+  width: 100%;
+  display: inline-flex;
+}
+
+.roombox {
+  /* margin: 0rem 0rem 0rem 4rem; */
+  padding: 1rem;
+  border: 2px solid #f0f5ff;
+  border-radius: 10px;
+  display: flex;
+  height: 100%;
+}
+
+.chatbox {
+  /* margin: 0rem 0rem 0rem 2rem; */
+  padding: 1rem;
+  border: 2px solid #f0f5ff;
+  border-radius: 10px;
+  display: flex;
+  height: 100%;
+}

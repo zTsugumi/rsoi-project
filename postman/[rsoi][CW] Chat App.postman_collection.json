@@ -1,0 +1,591 @@
+{
+	"info": {
+		"_postman_id": "51c3d3a9-5549-44ea-8a6f-3d6bb6997e55",
+		"name": "[rsoi][CW] Chat App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "11336351"
+	},
+	"item": [
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "Non user",
+					"item": [
+						{
+							"name": "Get rooms",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Note that room info has to be pre-empted in DB\r",
+											"pm.test('Get rooms', () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.contains('application/json');\r",
+											"\r",
+											"    const pageSize = Number(pm.request.url.query.get('pageSize'));\r",
+											"    const roomUUID = pm.collectionVariables.get('roomUUID');\r",
+											"\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response.items).to.be.an('array');\r",
+											"    pm.expect(response.page).to.be.not.undefined;\r",
+											"    pm.expect(response.pageSize).to.be.lte(pageSize);\r",
+											"    pm.expect(response.totalElements).to.be.not.undefined;\r",
+											"\r",
+											"    const room = _.find(response.items, { 'uuid': roomUUID });\r",
+											"    pm.expect(room).to.be.not.undefined;\r",
+											"    pm.expect(room.uuid).to.eq(roomUUID);\r",
+											"    pm.expect(room.name).to.eq('room 1');\r",
+											"    pm.expect(room.description).to.eq('room 1 is awesome!');\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/api/v1/rooms?page=1&pageSize=10",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"rooms"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get chats in a room",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get chats in a room\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");\r",
+											"\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.an(\"array\");\r",
+											"\r",
+											"    pm.collectionVariables.set('chatCount', response.length);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{baseURL}}/api/v1/chats/{{roomUUID}}"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Normal User",
+					"item": [
+						{
+							"name": "Signup",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Signup\", () => {\r",
+											"    const req = JSON.parse(request.data);\r",
+											"    const firstName = req.firstName;\r",
+											"    const lastName = req.lastName;\r",
+											"    const email = req.email;\r",
+											"\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");\r",
+											"\r",
+											"    const res = pm.response.json();\r",
+											"\r",
+											"    pm.expect(res.password).to.be.undefined;\r",
+											"    pm.expect(res.firstName).to.be.eq(firstName);\r",
+											"    pm.expect(res.lastName).to.be.eq(lastName);\r",
+											"    pm.expect(res.email).to.be.eq(email);\r",
+											"    pm.expect(res.role).to.be.eq(\"user\");\r",
+											"\r",
+											"    pm.collectionVariables.set(\"userUUID\", res.uuid);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var emailCount = pm.environment.get('emailCount');\r",
+											"var email = `phieudieuhai${emailCount}@gmail.com`;\r",
+											"pm.environment.set('email', email);\r",
+											"pm.environment.set('emailCount', Number(emailCount) + 1);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}/api/v1/signup"
+							},
+							"response": []
+						},
+						{
+							"name": "Signin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Signin', () => {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.contains('application/json');\r",
+											"    pm.expect(pm.cookies.get('Authentication')).to.not.be.undefined;\r",
+											"\r",
+											"    const res = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(res.email).to.be.eq(pm.environment.get('email'));\r",
+											"    pm.expect(res.password).to.be.undefined;\r",
+											"    pm.expect(res.firstName).to.be.eq(pm.environment.get('firstName'));\r",
+											"    pm.expect(res.lastName).to.be.eq(pm.environment.get('lastName'));\r",
+											"    pm.expect(res.role).to.be.eq('user');\r",
+											"    pm.expect(res.uuid).to.be.eq(pm.collectionVariables.get('userUUID'));\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}/api/v1/signin"
+							},
+							"response": []
+						},
+						{
+							"name": "Authentication",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Authentication', () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.contains('application/json');\r",
+											"    pm.expect(pm.cookies.get('Authentication')).to.not.be.undefined;\r",
+											"\r",
+											"    const res = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(res.email).to.be.eq(pm.environment.get('email'));\r",
+											"    pm.expect(res.password).to.be.undefined;\r",
+											"    pm.expect(res.firstName).to.be.eq(pm.environment.get('firstName'));\r",
+											"    pm.expect(res.lastName).to.be.eq(pm.environment.get('lastName'));\r",
+											"    pm.expect(res.role).to.be.eq('user');\r",
+											"    pm.expect(res.uuid).to.be.eq(pm.collectionVariables.get('userUUID'));\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:3001/api/v1/auth"
+							},
+							"response": []
+						},
+						{
+							"name": "Post chat",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var moment = require('moment');\r",
+											"\r",
+											"pm.collectionVariables.set('now', moment());\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Post chat', () => {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.contains('application/json');\r",
+											"\r",
+											"    const senderName = `${pm.environment.get('firstName')} ${pm.environment.get('lastName')}`;\r",
+											"\r",
+											"    const res = pm.response.json();\r",
+											"    pm.expect(res.userUUID).to.be.eq(pm.collectionVariables.get('userUUID'));\r",
+											"    pm.expect(res.roomUUID).to.be.eq(pm.collectionVariables.get('roomUUID'));\r",
+											"    pm.expect(res.type).to.be.eq('text');\r",
+											"    pm.expect(res.content).to.be.eq('Hello world!');\r",
+											"    pm.expect(res.senderName).to.be.eq(senderName);\r",
+											"    pm.expect(res.atTime).to.be.eq(pm.collectionVariables.get('now'));\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userUUID\": \"{{userUUID}}\",\r\n    \"roomUUID\": \"{{roomUUID}}\",\r\n    \"type\": \"text\",\r\n    \"atTime\": \"{{now}}\",\r\n    \"content\": \"Hello world!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{chatURL}}/api/v1/chats"
+							},
+							"response": []
+						},
+						{
+							"name": "Get chats in a room",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get chats in a room\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");\r",
+											"\r",
+											"    const chatCount = Number(pm.collectionVariables.get('chatCount'));\r",
+											"    const roomUUID = pm.collectionVariables.get('roomUUID');\r",
+											"    const userUUID = pm.collectionVariables.get('userUUID');\r",
+											"    const now = pm.collectionVariables.get('now');\r",
+											"    const senderName = `${pm.environment.get('firstName')} ${pm.environment.get('lastName')}`;\r",
+											"\r",
+											"    const res = pm.response.json();\r",
+											"    pm.expect(res).to.be.an(\"array\");\r",
+											"    pm.expect(res.length).to.be.eq(chatCount + 1);\r",
+											"\r",
+											"    const chat = _.find(res, { 'userUUID': userUUID, 'atTime': now });\r",
+											"    pm.expect(chat).to.be.not.undefined;\r",
+											"    pm.expect(chat.roomUUID).to.eq(roomUUID);\r",
+											"    pm.expect(chat.userUUID).to.eq(userUUID);\r",
+											"    pm.expect(chat.type).to.be.eq('text');\r",
+											"    pm.expect(chat.content).to.be.eq('Hello world!');\r",
+											"    pm.expect(chat.senderName).to.be.eq(senderName);\r",
+											"    pm.expect(chat.atTime).to.be.eq(now);\r",
+											"\r",
+											"    pm.collectionVariables.set('chatCount', chatCount + 1);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{baseURL}}/api/v1/chats/{{roomUUID}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Signout",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Authentication', () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.cookies.get('Authentication')).to.be.undefined;\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{baseURL}}/api/v1/signout"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Profile",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{baseURL}}/api/v1/u/{{userUUID}}"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Signin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Note that admin account has to be pre-empted in DB\r",
+											"pm.test('Signin', () => {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.contains('application/json');\r",
+											"    pm.expect(pm.cookies.get('Authentication')).to.not.be.undefined;\r",
+											"\r",
+											"    const res = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(res.email).to.be.eq(pm.environment.get('emailAdmin'));\r",
+											"    pm.expect(res.password).to.be.undefined;\r",
+											"    pm.expect(res.firstName).to.be.eq(pm.environment.get('firstNameAdmin'));\r",
+											"    pm.expect(res.lastName).to.be.eq(pm.environment.get('lastNameAdmin'));\r",
+											"    pm.expect(res.role).to.be.eq('admin');\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{emailAdmin}}\",\r\n    \"password\": \"{{passwordAdmin}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}/api/v1/signin"
+							},
+							"response": []
+						},
+						{
+							"name": "Add statistic",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Add statistic', () => {\r",
+											"    pm.response.to.have.status(201);    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var moment = require('moment');\r",
+											"\r",
+											"pm.collectionVariables.set('now', moment());\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"service\": \"test\",\r\n    \"description\": \"test statistic\",\r\n    \"atTime\": \"{{now}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{statURL}}/api/v1/statistics"
+							},
+							"response": []
+						},
+						{
+							"name": "Get statistics",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Get statistics', () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");\r",
+											"    const now = pm.collectionVariables.get('now');\r",
+											"\r",
+											"    const res = pm.response.json();\r",
+											"    pm.expect(res).to.be.an(\"array\");\r",
+											"\r",
+											"    const stat = _.find(res, { 'atTime': now });\r",
+											"    pm.expect(stat).to.be.not.undefined;\r",
+											"    pm.expect(stat.uuid).to.be.not.undefined;\r",
+											"    pm.expect(stat.service).to.be.eq('test');\r",
+											"    pm.expect(stat.atTime).to.be.eq(now);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var moment = require('moment');\r",
+											"\r",
+											"var tenMinsBack = moment().subtract(10, 'minutes');\r",
+											"pm.collectionVariables.set('fromDate', tenMinsBack);\r",
+											"\r",
+											"var now = moment().now;\r",
+											"pm.collectionVariables.set('toDate', now);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/api/v1/statistics?service=test",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"statistics"
+									],
+									"query": [
+										{
+											"key": "service",
+											"value": "test"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userUUID",
+			"value": ""
+		},
+		{
+			"key": "roomUUID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "fromDate",
+			"value": ""
+		},
+		{
+			"key": "toDate",
+			"value": ""
+		},
+		{
+			"key": "now",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "chatCount",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
