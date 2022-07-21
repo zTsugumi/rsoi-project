@@ -7,97 +7,97 @@ on:
     branches:
       - master
 jobs:
-  # auth:
-  #   name: Auth
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
+  auth:
+    name: Auth
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14.18.1'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.18.1'
 
-  #     - name: Install dependencies
-  #       run: |
-  #         cd ./auth
-  #         npm ci
+      - name: Install dependencies
+        run: |
+          cd ./auth
+          npm ci
 
-  #     - name: Unit test
-  #       run: |
-  #         cd ./auth
-  #         npm run test
+      - name: Unit test
+        run: |
+          cd ./auth
+          npm run test
 
-  # room:
-  #   name: Room
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
+  room:
+    name: Room
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14.18.1'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.18.1'
 
-  #     - name: Install dependencies
-  #       run: |
-  #         cd ./room
-  #         npm ci
+      - name: Install dependencies
+        run: |
+          cd ./room
+          npm ci
 
-  #     - name: Unit test
-  #       run: |
-  #         cd ./room
-  #         npm run test
+      - name: Unit test
+        run: |
+          cd ./room
+          npm run test
 
-  # chat:
-  #   name: Chat
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
+  chat:
+    name: Chat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14.18.1'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.18.1'
 
-  #     - name: Install dependencies
-  #       run: |
-  #         cd ./chat
-  #         npm ci
+      - name: Install dependencies
+        run: |
+          cd ./chat
+          npm ci
 
-  #     - name: Unit test
-  #       run: |
-  #         cd ./chat
-  #         npm run test
+      - name: Unit test
+        run: |
+          cd ./chat
+          npm run test
 
-  # statistic:
-  #   name: Statistic
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
+  statistic:
+    name: Statistic
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14.18.1'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.18.1'
 
-  #     - name: Install dependencies
-  #       run: |
-  #         cd ./statistic
-  #         npm ci
+      - name: Install dependencies
+        run: |
+          cd ./statistic
+          npm ci
 
-  #     - name: Unit test
-  #       run: |
-  #         cd ./statistic
-  #         npm run test
+      - name: Unit test
+        run: |
+          cd ./statistic
+          npm run test
 
   build_push:
     name: Build and Push to Docker Hub
-    # needs: [auth, room, chat, statistic]
+    needs: [auth, room, chat, statistic]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -112,40 +112,40 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # - name: Build and Push Gateway
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: ./gateway
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-gateway:v1.0
+      - name: Build and Push Gateway
+        uses: docker/build-push-action@v2
+        with:
+          context: ./gateway
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-gateway:v1.0
 
-      # - name: Build and Push Auth
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: ./auth
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-auth:v1.0
+      - name: Build and Push Auth
+        uses: docker/build-push-action@v2
+        with:
+          context: ./auth
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-auth:v1.0
 
-      # - name: Build and Push Room
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: ./room
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-room:v1.0
+      - name: Build and Push Room
+        uses: docker/build-push-action@v2
+        with:
+          context: ./room
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-room:v1.0
 
-      # - name: Build and Push Chat
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: ./chat
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-chat:v1.0
+      - name: Build and Push Chat
+        uses: docker/build-push-action@v2
+        with:
+          context: ./chat
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-chat:v1.0
 
-      # - name: Build and Push Statistic
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: ./statistic
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-statistic:v1.0
+      - name: Build and Push Statistic
+        uses: docker/build-push-action@v2
+        with:
+          context: ./statistic
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cw-statistic:v1.0
 
       - name: Build and Push Frontend
         uses: docker/build-push-action@v2
