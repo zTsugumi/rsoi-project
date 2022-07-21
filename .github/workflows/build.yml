@@ -21,12 +21,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd ./src/auth
+          cd ./auth
           npm ci
 
       - name: Unit test
         run: |
-          cd ./src/auth
+          cd ./auth
           npm run test
 
   room:
@@ -43,12 +43,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd ./src/room
+          cd ./room
           npm ci
 
       - name: Unit test
         run: |
-          cd ./src/room
+          cd ./room
           npm run test
 
   chat:
@@ -65,12 +65,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd ./src/chat
+          cd ./chat
           npm ci
 
       - name: Unit test
         run: |
-          cd ./src/chat
+          cd ./chat
           npm run test
 
   statistic:
@@ -87,12 +87,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd ./src/statistic
+          cd ./statistic
           npm ci
 
       - name: Unit test
         run: |
-          cd ./src/statistic
+          cd ./statistic
           npm run test
 
   build_push:
