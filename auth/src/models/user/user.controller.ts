@@ -1,4 +1,12 @@
-import { Body, Controller, Get, ParseArrayPipe, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseArrayPipe,
+  ParseUUIDPipe,
+  Req,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { AppConfigService } from 'src/config/app/config.service';
 import { StatisticService } from '../statistic/statistic.service';
@@ -32,5 +40,27 @@ export class UserController {
     });
 
     return names;
+  }
+
+  @Get('u/:userUUID')
+  public async getProfile(
+    @Req() request: Request,
+    @Param('userUUID', new ParseUUIDPipe()) userUUID: string,
+  ) {
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Pending`,
+      atTime: new Date().toISOString(),
+    });
+
+    const profile = await this._userService.getByUUID(userUUID);
+
+    this._statisticService.addStatistic({
+      service: this._appConfig.name,
+      description: `${request.method}${request.url}: Succeeded`,
+      atTime: new Date().toISOString(),
+    });
+
+    return profile;
   }
 }

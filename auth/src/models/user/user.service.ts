@@ -42,6 +42,21 @@ export class UserService {
     );
   }
 
+  public async getByUUID(userUUID: string) {
+    const user = await this._userRepository.findOne({
+      where: { uuid: userUUID },
+    });
+
+    if (user) {
+      return user;
+    }
+
+    throw new HttpException(
+      'User with this uuid does not exist',
+      HttpStatus.NOT_FOUND,
+    );
+  }
+
   public async getNames(usersUUID: String[]) {
     const users = await this._userRepository.find({
       where: { uuid: In(usersUUID) },
