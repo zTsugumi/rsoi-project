@@ -4,7 +4,7 @@ import { StatisticService } from '../statistic/statistic.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
-describe('UserController', () => {
+describe('AuthController', () => {
   let authController: AuthController;
   let authService: AuthService;
 

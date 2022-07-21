@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { JwtConfigService } from '../../config/jwt/config.service';
 
-describe('UserService', () => {
+describe('AuthService', () => {
   let authService: AuthService;
 
   class UserServiceMock {}
