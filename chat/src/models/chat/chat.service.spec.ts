@@ -1,12 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { StatisticService } from './statistic.service';
-import { of } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { of } from 'rxjs';
+import { Repository } from 'typeorm';
 import { AppConfigService } from '../../config/app/config.service';
+import { ChatService } from './chat.service';
+import { ChatRepository } from './repositories/chat.repository';
 
-describe('StatisticService', () => {
-  let statisticService: StatisticService;
-  let httpService: HttpService;
+describe('ChatService', () => {
+  let chatService: ChatService;
 
   class HttpServiceMock {
     public get<T>() {
@@ -16,13 +18,12 @@ describe('StatisticService', () => {
       return of({});
     }
   }
-
   class AppConfigServiceMock {}
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
-        StatisticService,
+        ChatService,
         {
           provide: HttpService,
           useClass: HttpServiceMock,
@@ -31,16 +32,20 @@ describe('StatisticService', () => {
           provide: AppConfigService,
           useClass: AppConfigServiceMock,
         },
+        {
+          provide: getRepositoryToken(ChatRepository),
+          useClass: Repository,
+        },
       ],
     }).compile();
 
-    statisticService = moduleRef.get<StatisticService>(StatisticService);
-    httpService = moduleRef.get<HttpService>(HttpService);
+    chatService = moduleRef.get<ChatService>(ChatService);
   });
 
+  // Test existence
   it('should be defined', () => {
-    expect(statisticService).toBeDefined();
+    expect(chatService).toBeDefined();
   });
 
-  // WIP
+  // WIP for other requests
 });
